@@ -1,0 +1,5 @@
+.DS_Store
+
+# do not store data in the repo
+a-pressure-map-dataset-for-in-bed-posture-classification-1.0.0
+data

@@ -26,3 +26,8 @@ adults.
     │   ├── subject_info.csv         # Subject metadata
 
 
+#### Citation
+
+M. Baran Pouyan, J. Birjandtalab, M. Heydarzadeh, M. Nourani, S. Ostadabbas. A pressure map dataset for posture and subject analytics. 2017 IEEE EMBS International Conference on Biomedical & Health Informatics (BHI). DOI: 10.1109/BHI.2017.7897206.
+
+Goldberger, A., Amaral, L., Glass, L., Hausdorff, J., Ivanov, P. C., Mark, R., ... & Stanley, H. E. (2000). PhysioBank, PhysioToolkit, and PhysioNet: Components of a new research resource for complex physiologic signals. Circulation [Online]. 101 (23), pp. e215–e220.

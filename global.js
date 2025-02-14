@@ -7,6 +7,10 @@ let pages = [
 // let nav = document.createElement('nav');
 // document.body.prepend(nav);
 
+
+// fix the nav bar in css
+
+
 const basePath = location.pathname.includes('/web/') ? location.pathname.split('/web/')[0] + '/web/' : '/web/';
 
 for (let p of pages) {

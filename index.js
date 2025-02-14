@@ -17,15 +17,17 @@ const pressureData = Array.from({ length: gridHeight }, () =>
   Array.from({ length: gridWidth }, () => Math.random() * 100)
 );
 
-const svg = d3.select("body")
+const svg = d3.select("#chart1")
   .append("svg")
   .attr("width", width)
   .attr("height", height)
   .style("background", "black");
 
-const g = svg.append("g");
+const g = svg.append("g");// g for great ?
 
 // placeholder heatmap image
+
+// erm no ? active svg with element types will be needed
 const image = g.append("image")
   .attr("xlink:href", "imgs/heatmap.png")
   .attr("x", 0)
@@ -43,7 +45,7 @@ const tooltip = d3.select("body")
   .style("display", "none")
   .style("font-size", "14px");
 
-// Function to get pressure value from grid
+// Function to get "pressure" value from grid
 function getPressure(x, y) {
   const col = Math.floor((x / width) * gridWidth);
   const row = Math.floor((y / height) * gridHeight);

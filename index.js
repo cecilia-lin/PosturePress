@@ -1,7 +1,48 @@
-// import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 var jsonData = JSON.parse('experiment1_data.json');
 
+// Function to create a contour map
+function createContourMap(svgId, data, color) {
+  const svg = d3.select(svgId);
+  const width = +svg.attr("width");
+  const height = +svg.attr("height");
 
+  // Create scales
+  const xScale = d3.scaleLinear()
+      .domain([0, 300])
+      .range([0, width]);
+
+  const yScale = d3.scaleLinear()
+      .domain([0, 300])
+      .range([height, 0]);
+
+  // Create contours
+  const contourData = d3.contours()
+      .size([width, height])
+      .thresholds(5)
+      (data.map(d => d.value));
+
+  // Color scale
+  const colorScale = d3.scaleSequential(d3.interpolateBlues)
+      .domain([0, d3.max(data, d => d.value)]);
+
+  // Draw contours
+  svg.selectAll("path")
+      .data(contourData)
+      .enter().append("path")
+      .attr("d", d3.geoPath())
+      .attr("fill", d => colorScale(d.value))
+      .attr("stroke", "black");
+}
+
+const left = jsonData.S1.Left
+const supine = jsonData.S1.Supine
+const right = jsonData.S1.Right
+
+// Create three contour maps with different colors
+createContourMap("#left", left, "blue");
+createContourMap("#supine", supine, "red");
+createContourMap("#right", right, "green");
 
 
 

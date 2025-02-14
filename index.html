@@ -25,54 +25,32 @@
         <div style="height: 500px; background-color: #222;">
         </div>
         
+        <div class="weight-height-filter">
+            <div class="filter-box">
+                <label for="weight">Weight</label>
+                <input type="number" id="weight-number" name="weight-number" min="0" max="100" value="50" oninput="this.previousElementSibling.value = this.value">
+            </div>
+    
+            <div class="filter-box">
+                <label for="height">Height</label>
+                <input type="number" id="height-number" name="height-number" min="0" max="100" value="50" oninput="this.previousElementSibling.value = this.value">
+            </div>
+        </div>
 
         <div class="charts-section">
             <div class="chart">
                 <h2>Sleeping on your Left</h2>
-                <div class="visualization" id="left-sleep"></div>
-                <svg id="map1" width="300" height="300"></svg>
+                <svg id="map1"></svg>
             </div>
             <div class="chart">
                 <h2>Sleeping on Your Back</h2>
-                <div class="visualization" id="back-sleep"></div>
-                <svg id="map2" width="300" height="300"></svg>
+                <svg id="map2"></svg>
             </div>
             <div class="chart">
                 <h2>Sleeping on Your Right</h2>
-                <div class="visualization" id="right-sleep"></div>
-                <svg id="map3" width="300" height="300"></svg>
+                <svg id="map3"></svg>
             </div> 
     </div>
 </body>
 
 </html>
-
-
-<!-- ashley's work -->
-<!-- <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PosturePress</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="global.js"></script>
-</head>
-<body>
-
-
-    <h1>PosturePress</h1>
-    
-    <p>Dynamic visualization of distributed pressure in different sleeping positions.</p>
-
-
-    <h2>Dashboard</h2>
-    <p>Drafting functionality 1: zooming and panning.</p>
-
-
-
-    <script src="global.js" type="module"></script>
-    <script src="index.js" type="module"></script>
-
-</body>
-
-</html> -->

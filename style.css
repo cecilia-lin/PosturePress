@@ -37,9 +37,7 @@ nav a {
     transition: 0.2s ease-in-out;
 }
 
-nav a:hover {
-    background-color: #f0f0f0;
-}
+
 
 nav a.current {
     font-weight: bold;
@@ -155,17 +153,17 @@ nav a:hover {
     border-bottom-width: 0.4em;
     padding-bottom: 0.4em;
 }
-
+*/
 nav a.current {
     border-bottom-width: 0.4em;
     border-bottom-color: var(--color-accent);
     padding-bottom: 0.4em;
-}  */
+}  
 
 /* List styles */
-ul li {
+/* ul li {
     display: contents;
-}
+} */
 
 /* Make sure form elements inherit font */
 

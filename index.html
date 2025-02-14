@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Posture Press</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script defer src="contourMaps.js"></script>
     <script src="global.js"></script> 
 </head>
 
@@ -28,14 +30,17 @@
             <div class="chart">
                 <h2>Sleeping on your Left</h2>
                 <div class="visualization" id="left-sleep"></div>
+                <svg id="map1" width="300" height="300"></svg>
             </div>
             <div class="chart">
                 <h2>Sleeping on Your Back</h2>
                 <div class="visualization" id="back-sleep"></div>
+                <svg id="map2" width="300" height="300"></svg>
             </div>
             <div class="chart">
                 <h2>Sleeping on Your Right</h2>
                 <div class="visualization" id="right-sleep"></div>
+                <svg id="map3" width="300" height="300"></svg>
             </div> 
     </div>
 </body>

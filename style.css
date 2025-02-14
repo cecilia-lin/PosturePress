@@ -108,22 +108,22 @@ p {
 
 /* ashley's work------------------------ */
 /* Root styles */
-/* html {
+html {
     --color-accent: oklch(50% 0.12 170);
     color-scheme: light dark;
-} */
+}
 
 /* Base body styles */
-/* body {
+body {
     font: 100%/1.5 system-ui;
     max-width: 100ch;
     margin-inline: max(4em, (100% - 100ch) / 2);
     padding-inline: 4em;
     accent-color: var(--color-accent);
-} */
+}
 
 /* Navigation */
-/* nav {
+nav {
     --border-color: oklch(50% 10% 200 / 40%);
     padding: 1rem;
     border-bottom: 1px solid var(--border-color);
@@ -155,15 +155,15 @@ nav a.current {
     border-bottom-width: 0.4em;
     border-bottom-color: var(--color-accent);
     padding-bottom: 0.4em;
-} */
+}
 
 /* List styles */
-/* ul li {
+ul li {
     display: contents;
-} */
+}
 
 /* Make sure form elements inherit font */
-/* select,
+select,
 input,
 textarea,
 button {
@@ -174,4 +174,4 @@ button {
     display: flex;
     align-items: center;
     gap: 20px;
-} */
+}

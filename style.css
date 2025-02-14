@@ -60,12 +60,18 @@ svg {
 
 
 
+/* .text-section {
+    margin-bottom: 40px;
+}
 
+.charts-section {
+    display: flex;
+    justify-content: space-between;
+}
 
-/* Centered content box */
 .container {
-    width: 100%; /* Full width */
-    height: 100vh; /* Full height */
+    width: 100%; 
+    height: 100vh; 
     margin: 20px;
     padding: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -75,7 +81,36 @@ svg {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+} */
+
+
+/* Container that holds your main content */
+.container {
+    display: flex;
+    flex-direction: column; /* Ensures children are stacked vertically */
+    align-items: center;
+    width: 100%; /* Adjust width as needed */
+    padding-top: 80px; /* For the fixed navigation bar */
 }
+
+/* Text section styles ensuring vertical stacking */
+.text-section {
+    width: 100%; /* Full width */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.charts-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row; /* Default is row, adjust if needed */
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+
 
 /* Headings and text styling */
 h1 {
@@ -92,14 +127,7 @@ p {
     margin-bottom: 20px;
 }
 
-.text-section {
-    margin-bottom: 40px;
-}
 
-.charts-section {
-    display: flex;
-    justify-content: space-between;
-}
 
 .chart {
     width: 32%;

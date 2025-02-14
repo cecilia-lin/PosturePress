@@ -4,8 +4,11 @@ let pages = [
     { url: 'about/', title: 'About' }
 ];
 
-// let nav = document.createElement('nav');
-// document.body.prepend(nav);
+
+
+// this right now is aggressively in alpha the other tabs are showing direct file structures
+let nav = document.createElement('nav');
+document.body.prepend(nav);
 
 const basePath = location.pathname.includes('/web/') ? location.pathname.split('/web/')[0] + '/web/' : '/web/';
 

@@ -1,17 +1,16 @@
-// import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
-var jsonData = JSON.parse('experiment1_data.json');
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
-
-
-
-
-
-
-
+// Load data
+const jsonData = await d3.json("data/experiment1_data.json");
+console.log(jsonData);
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
 const gridWidth = 64;  // change grid size to fit data later 
 const gridHeight = 32;
+
+var data_left = null;
+var data_right = null;
+var sleep_back = null;
 
 
 // Placeholder pressure data -- still trying to figure out how to transfer the actual data
@@ -75,3 +74,39 @@ const zoom = d3.zoom()
   });
 
 svg.call(zoom);
+
+// Add event listeners to input fields
+document.getElementById('weight-number').addEventListener('input', handleInputChange);
+document.getElementById('height-number').addEventListener('input', handleInputChange);
+
+
+
+// Function to handle input changes on the weight and height
+function handleInputChange() {
+  const weight = document.getElementById('weight-number').value;
+  const height = document.getElementById('height-number').value;
+
+  // finding the closest data point in the JSON data
+  // update the pressureData array with the new data_left, data_right, and sleep_back values
+  
+  let closestDataPoint = null;
+  let minDistance = Infinity;
+
+  for (const [key, value] of Object.entries(jsonData)) {
+    const float_weight = parseFloat(value.weight);
+    const float_height = parseFloat(value.height);
+    const distance = Math.sqrt((float_weight - weight) ** 2 + (float_height - height) ** 2);
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestDataPoint = [key, value];
+    }
+
+  }
+
+  if (closestDataPoint) {
+    data_left = closestDataPoint[1].Left;
+    data_right = closestDataPoint[1].Right;
+    sleep_back = closestDataPoint[1].Supine;
+  }
+}

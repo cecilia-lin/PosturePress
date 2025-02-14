@@ -75,8 +75,8 @@ p {
     justify-content: space-between;
     min-height: 100vh;
     gap: 2%;
-    padding-left: 5%;
-    padding-right: 5%;
+    padding-left: 10%;
+    padding-right: 10%;
     margin-bottom: 10%;
     background-color: #222;
 
@@ -97,14 +97,15 @@ p {
 }
 
 .visualization {
-    width: 20%;  
-    height: 80%; 
+    width: 80%;  
+    aspect-ratio: 1/ 2; /* Ensures width is always twice the height */
     background-color: #eaeaea;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid #ccc;
 }
+
 
 /* ashley's work------------------------ */
 /* Root styles */

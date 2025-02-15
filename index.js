@@ -9,17 +9,19 @@ document.addEventListener("DOMContentLoaded", function () {
       createContourMap("#right", subject.Right, d3.interpolateWarm);
     });
 });
+
+
 // // Load data
-// const jsonData = await d3.json("data/experiment1_data.json");
+const jsonData = await d3.json("data/experiment1_data.json");
 // console.log(jsonData);
 // const width = window.innerWidth / 2;
 // const height = window.innerHeight / 2;
 // const gridWidth = 64;  // change grid size to fit data later 
 // const gridHeight = 32;
 
-// var data_left = null;
-// var data_right = null;
-// var sleep_back = null;
+var data_left = null;
+var data_right = null;
+var sleep_back = null;
 
 
 // // Placeholder pressure data -- still trying to figure out how to transfer the actual data
@@ -164,4 +166,7 @@ function handleInputChange() {
     data_right = closestDataPoint[1].Right;
     sleep_back = closestDataPoint[1].Supine;
   };
+  console.log(data_left);
+  console.log(data_right);
+  console.log(sleep_back);
 }

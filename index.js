@@ -3,10 +3,19 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("data/experiment1_data.json")
     .then(response => response.json())
     .then(jsonData => {
-      const subject = jsonData["S1"]; // Change as needed
+
+
+      // felix's changes
+      /* const subject = jsonData["S1"]; // Change as needed
       createContourMap("#left", subject.Left, d3.interpolateWarm);
       createContourMap("#supine", subject.Supine, d3.interpolateWarm);
-      createContourMap("#right", subject.Right, d3.interpolateWarm);
+      createContourMap("#right", subject.Right, d3.interpolateWarm); */
+      updateCharts(jsonData, "S1");
+      
+      // Add event listeners to input fields for dynamic updates
+      document.getElementById('weight-number').addEventListener('input', () => handleInputChange(jsonData));
+      document.getElementById('height-number').addEventListener('input', () => handleInputChange(jsonData));
+
     });
 });
 
@@ -24,10 +33,19 @@ var data_right = null;
 var sleep_back = null;
 
 
+// felix's changes
+function updateCharts(jsonData, subjectKey) {
+  const subject = jsonData[subjectKey];
+  createContourMap("#left", subject.Left, d3.interpolateWarm);
+  createContourMap("#supine", subject.Supine, d3.interpolateWarm);
+  createContourMap("#right", subject.Right, d3.interpolateWarm);
+}
 // TODO
 // place ash's pressure code here later
 
 
+
+/* 
 
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
@@ -94,7 +112,7 @@ d3.json("data/experiment1_data.json").then((data) => {
     });
 
   svg.call(zoom);
-});
+}); */
 
 
 function createContourMap(svgId, data, colorScale) {
@@ -140,6 +158,22 @@ function createContourMap(svgId, data, colorScale) {
       .attr("d", path) // Use correctly scaled projection
       .attr("fill", d => color(d.value))
       .attr("stroke-width", 0.2); // Reduce stroke width for clarity
+      
+      
+      // felix's changes
+      // Add pressure readings as text elements
+
+      svg.selectAll("text")
+      .data(data.flat())
+      .enter()
+      .append("text")
+      .attr("x", (d, i) => (i % 32) * scaleX + scaleX / 2)
+      .attr("y", (d, i) => Math.floor(i / 32) * scaleY + scaleY / 2)
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("font-size", 8)
+      .attr("fill", "white")
+      .text(d => d.toFixed(2));
   }
 
   // Initial render
@@ -183,9 +217,13 @@ function handleInputChange() {
   }
 
   if (closestDataPoint) {
-    data_left = closestDataPoint[1].Left;
-    data_right = closestDataPoint[1].Right;
-    sleep_back = closestDataPoint[1].Supine;
+    // data_left = closestDataPoint[1].Left;
+    // data_right = closestDataPoint[1].Right;
+    // sleep_back = closestDataPoint[1].Supine;
+
+    // felix's changes
+    updateCharts(jsonData, closestDataPoint);
+
   };
   console.log(data_left);
   console.log(data_right);

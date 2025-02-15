@@ -1,6 +1,5 @@
-[
-    {
-        "subject": "S1",
+{
+    "S1": {
         "height": 175,
         "weight": 87,
         "Supine": [
@@ -6538,8 +6537,7 @@
             ]
         ]
     },
-    {
-        "subject": "S10",
+    "S10": {
         "height": 174,
         "weight": 79,
         "Supine": [
@@ -13077,8 +13075,7 @@
             ]
         ]
     },
-    {
-        "subject": "S11",
+    "S11": {
         "height": 176,
         "weight": 91,
         "Supine": [
@@ -19616,8 +19613,7 @@
             ]
         ]
     },
-    {
-        "subject": "S12",
+    "S12": {
         "height": 170,
         "weight": 78,
         "Supine": [
@@ -26155,8 +26151,7 @@
             ]
         ]
     },
-    {
-        "subject": "S13",
+    "S13": {
         "height": 174,
         "weight": 74,
         "Supine": [
@@ -32694,8 +32689,7 @@
             ]
         ]
     },
-    {
-        "subject": "S2",
+    "S2": {
         "height": 183,
         "weight": 85,
         "Supine": [
@@ -39233,8 +39227,7 @@
             ]
         ]
     },
-    {
-        "subject": "S3",
+    "S3": {
         "height": 183,
         "weight": 100,
         "Supine": [
@@ -45772,8 +45765,7 @@
             ]
         ]
     },
-    {
-        "subject": "S4",
+    "S4": {
         "height": 177,
         "weight": 70,
         "Supine": [
@@ -52311,8 +52303,7 @@
             ]
         ]
     },
-    {
-        "subject": "S5",
+    "S5": {
         "height": 172,
         "weight": 66,
         "Supine": [
@@ -58850,8 +58841,7 @@
             ]
         ]
     },
-    {
-        "subject": "S6",
+    "S6": {
         "height": 169,
         "weight": 83,
         "Supine": [
@@ -65389,8 +65379,7 @@
             ]
         ]
     },
-    {
-        "subject": "S7",
+    "S7": {
         "height": 179,
         "weight": 96,
         "Supine": [
@@ -71928,8 +71917,7 @@
             ]
         ]
     },
-    {
-        "subject": "S8",
+    "S8": {
         "height": 186,
         "weight": 63,
         "Supine": [
@@ -78467,8 +78455,7 @@
             ]
         ]
     },
-    {
-        "subject": "S9",
+    "S9": {
         "height": 174,
         "weight": 74,
         "Supine": [
@@ -85006,4 +84993,4 @@
             ]
         ]
     }
-]
+}

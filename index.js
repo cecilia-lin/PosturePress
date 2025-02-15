@@ -3,16 +3,6 @@ var data_left = null;
 var data_right = null;
 var data_back = null;
 
-document.addEventListener("DOMContentLoaded", function () {
-  fetch("data/experiment1_data.json")
-    .then(response => response.json())
-    .then(data => {
-      jsonData = data;
-      handleInputChange();
-      rendermap();
-    });
-});
-
 function createContourMap(svgId, data, colorScale) {
   const svg = d3.select(svgId)
     .attr("preserveAspectRatio", "xMinYMin meet");
@@ -106,6 +96,26 @@ function handleInputChange() {
   };
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("data/experiment1_data.json")
+    .then(response => response.json())
+    .then(data => {
+      jsonData = data;
+      handleInputChange();
+      rendermap();
+    });
+});
+
+// Add event listeners to input fields
+document.getElementById('weight-number').addEventListener('input', handleInputChange);
+document.getElementById('height-number').addEventListener('input', handleInputChange);
+
+
+
+
+
+
+
 // const width = window.innerWidth / 2;
 // const height = window.innerHeight / 2;
 // const gridWidth = 64;  // change grid size to fit data later 
@@ -133,7 +143,7 @@ function handleInputChange() {
 //   .attr("width", width)
 //   .attr("height", height);
 
-// // Tooltip
+// Tooltip
 // const tooltip = d3.select("body")
 //   .append("div")
 //   .style("position", "absolute")
@@ -167,9 +177,6 @@ function handleInputChange() {
 
 
 
-// Add event listeners to input fields
-document.getElementById('weight-number').addEventListener('input', handleInputChange);
-document.getElementById('height-number').addEventListener('input', handleInputChange);
 
 
 

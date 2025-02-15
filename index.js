@@ -1,80 +1,17 @@
+let jsonData = null;
+var data_left = null;
+var data_right = null;
+var data_back = null;
 
 document.addEventListener("DOMContentLoaded", function () {
   fetch("data/experiment1_data.json")
     .then(response => response.json())
-    .then(jsonData => {
-      const subject = jsonData["S1"]; // Change as needed
-      createContourMap("#left", subject.Left, d3.interpolateWarm);
-      createContourMap("#supine", subject.Supine, d3.interpolateWarm);
-      createContourMap("#right", subject.Right, d3.interpolateWarm);
+    .then(data => {
+      jsonData = data;
+      handleInputChange();
+      rendermap();
     });
 });
-
-
-// // Load data
-const jsonData = await d3.json("data/experiment1_data.json");
-// console.log(jsonData);
-// const width = window.innerWidth / 2;
-// const height = window.innerHeight / 2;
-// const gridWidth = 64;  // change grid size to fit data later 
-// const gridHeight = 32;
-
-var data_left = null;
-var data_right = null;
-var sleep_back = null;
-
-
-// // Placeholder pressure data -- still trying to figure out how to transfer the actual data
-// const pressureData = Array.from({ length: gridHeight }, () =>
-//   Array.from({ length: gridWidth }, () => Math.random() * 100)
-// );
-
-// const svg = d3.select("body")
-//   .append("svg")
-//   .attr("width", width)
-//   .attr("height", height)
-//   .style("background", "black");
-
-// const g = svg.append("g");
-
-// // placeholder heatmap image
-// const image = g.append("image")
-//   .attr("xlink:href", "imgs/heatmap.png")
-//   .attr("x", 0)
-//   .attr("y", 0)
-//   .attr("width", width)
-//   .attr("height", height);
-
-// // Tooltip
-// const tooltip = d3.select("body")
-//   .append("div")
-//   .style("position", "absolute")
-//   .style("background", "rgba(255, 255, 255, 0.8)")
-//   .style("padding", "5px")
-//   .style("border-radius", "5px")
-//   .style("display", "none")
-//   .style("font-size", "14px");
-
-// // Function to get pressure value from grid
-// function getPressure(x, y) {
-//   const col = Math.floor((x / width) * gridWidth);
-//   const row = Math.floor((y / height) * gridHeight);
-//   return pressureData[row]?.[col] ? pressureData[row][col].toFixed(2) : "N/A";
-// }
-
-// // Mouse interaction
-// svg.on("mousemove", (event) => {
-//   const [x, y] = d3.pointer(event);
-//   const pressure = getPressure(x, y);
-
-//   tooltip.style("left", `${event.pageX + 10}px`)
-//     .style("top", `${event.pageY + 10}px`)
-//     .style("display", "block")
-//     .html(`Pressure: ${pressure}`);
-// });
-
-// svg.call(zoom);
-
 
 function createContourMap(svgId, data, colorScale) {
   const svg = d3.select(svgId)
@@ -131,12 +68,11 @@ function createContourMap(svgId, data, colorScale) {
   resizeObserver.observe(svg.node());
 }
 
-
-// Add event listeners to input fields
-document.getElementById('weight-number').addEventListener('input', handleInputChange);
-document.getElementById('height-number').addEventListener('input', handleInputChange);
-
-
+function rendermap() {
+  createContourMap("#left", data_left, d3.interpolateWarm);
+  createContourMap("#supine", data_back, d3.interpolateWarm);
+  createContourMap("#right", data_right, d3.interpolateWarm);
+}
 
 // Function to handle input changes on the weight and height
 function handleInputChange() {
@@ -164,9 +100,76 @@ function handleInputChange() {
   if (closestDataPoint) {
     data_left = closestDataPoint[1].Left;
     data_right = closestDataPoint[1].Right;
-    sleep_back = closestDataPoint[1].Supine;
+    data_back = closestDataPoint[1].Supine;
+
+    rendermap();
   };
-  console.log(data_left);
-  console.log(data_right);
-  console.log(sleep_back);
 }
+
+// const width = window.innerWidth / 2;
+// const height = window.innerHeight / 2;
+// const gridWidth = 64;  // change grid size to fit data later 
+// const gridHeight = 32;
+
+
+// // Placeholder pressure data -- still trying to figure out how to transfer the actual data
+// const pressureData = Array.from({ length: gridHeight }, () =>
+//   Array.from({ length: gridWidth }, () => Math.random() * 100)
+// );
+
+// const svg = d3.select("body")
+//   .append("svg")
+//   .attr("width", width)
+//   .attr("height", height)
+//   .style("background", "black");
+
+// const g = svg.append("g");
+
+// // placeholder heatmap image
+// const image = g.append("image")
+//   .attr("xlink:href", "imgs/heatmap.png")
+//   .attr("x", 0)
+//   .attr("y", 0)
+//   .attr("width", width)
+//   .attr("height", height);
+
+// // Tooltip
+// const tooltip = d3.select("body")
+//   .append("div")
+//   .style("position", "absolute")
+//   .style("background", "rgba(255, 255, 255, 0.8)")
+//   .style("padding", "5px")
+//   .style("border-radius", "5px")
+//   .style("display", "none")
+//   .style("font-size", "14px");
+
+// // Function to get pressure value from grid
+// function getPressure(x, y) {
+//   const col = Math.floor((x / width) * gridWidth);
+//   const row = Math.floor((y / height) * gridHeight);
+//   return pressureData[row]?.[col] ? pressureData[row][col].toFixed(2) : "N/A";
+// }
+
+// // Mouse interaction
+// svg.on("mousemove", (event) => {
+//   const [x, y] = d3.pointer(event);
+//   const pressure = getPressure(x, y);
+
+//   tooltip.style("left", `${event.pageX + 10}px`)
+//     .style("top", `${event.pageY + 10}px`)
+//     .style("display", "block")
+//     .html(`Pressure: ${pressure}`);
+// });
+
+// svg.call(zoom);
+
+
+
+
+
+// Add event listeners to input fields
+document.getElementById('weight-number').addEventListener('input', handleInputChange);
+document.getElementById('height-number').addEventListener('input', handleInputChange);
+
+
+

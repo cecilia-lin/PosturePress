@@ -9,6 +9,10 @@
 // find another function for the actual .txt values to be overlayed on the heatmap
 // convert the .txt files to svg/d3 friendly format
 
+// TODO 
+// find another function for the actual .txt values to be overlayed on the heatmap
+// convert the .txt files to svg/d3 friendly format
+
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
 const gridWidth = 64;  // change grid size to fit data later 

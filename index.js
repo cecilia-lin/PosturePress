@@ -115,9 +115,15 @@ d3.json("data/experiment1_data.json").then((data) => {
 }); */
 
 
-function createContourMap(svgId, data, colorScale) {
+/* function createContourMap(svgId, data, colorScale) {
   const svg = d3.select(svgId)
     .attr("preserveAspectRatio", "xMinYMin meet");
+
+
+  let g = svg.select("g.zoom-container");
+  if (g.empty()) {
+    g = svg.append("g").attr("class", "zoom-container");
+  }
 
 
     // Create tooltip element
@@ -137,6 +143,9 @@ function createContourMap(svgId, data, colorScale) {
     const width = bbox.width;
     const height = bbox.height;
     svg.selectAll("*").remove(); // Clear previous render
+
+
+    g.selectAll("*").remove(); 
 
     // Define a projection that ensures contours fit inside the SVG
     const scaleX = width / 32;
@@ -188,21 +197,132 @@ function createContourMap(svgId, data, colorScale) {
       // felix's changes
       // Add pressure readings as text elements
 
-      /* svg.selectAll("text")
-      .data(data.flat())
-      .enter()
-      .append("text")
-      .attr("x", (d, i) => (i % 32) * scaleX + scaleX / 2)
-      .attr("y", (d, i) => Math.floor(i / 32) * scaleY + scaleY / 2)
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("font-size", 8)
-      .attr("fill", "white")
-      .text(d => d.toFixed(2)); */
+      // svg.selectAll("text")
+      // .data(data.flat())
+      // .enter()
+      // .append("text")
+      // .attr("x", (d, i) => (i % 32) * scaleX + scaleX / 2)
+      // .attr("y", (d, i) => Math.floor(i / 32) * scaleY + scaleY / 2)
+      // .attr("text-anchor", "middle")
+      // .attr("alignment-baseline", "middle")
+      // .attr("font-size", 8)
+      // .attr("fill", "white")
+      // .text(d => d.toFixed(2));
   }
 
   // Initial render
   render();
+
+
+   
+   
+   
+   // Zoom functionality
+  const zoom = d3.zoom()
+   .scaleExtent([0.5, 10]) // Define zoom range
+   .on("zoom", (event) => {
+      g.attr("transform", event.transform);
+    });
+
+  svg.call(zoom);
+
+
+  // Resize observer to update if the SVG dimensions change
+  const resizeObserver = new ResizeObserver(() => {
+    render();
+  });
+  resizeObserver.observe(svg.node());
+} */
+function createContourMap(svgId, data, colorScale) {
+  const svg = d3.select(svgId)
+    .attr("preserveAspectRatio", "xMinYMin meet");
+
+  // Create or select a persistent group for the zoomable content
+  let g = svg.select("g.zoom-container");
+  if (g.empty()) {
+    g = svg.append("g").attr("class", "zoom-container");
+  }
+
+  // Create tooltip element (remains unchanged)
+  const tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("position", "absolute")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px")
+    .style("pointer-events", "none");
+
+  // Render function that updates the group contents without removing the group itself
+  function render() {
+    const bbox = svg.node().getBoundingClientRect(); // Get actual size
+    const width = bbox.width;
+    const height = bbox.height;
+    
+    // Instead of removing all elements, clear only the contents of the zoom container
+    g.selectAll("*").remove();
+
+    // Define a projection that ensures contours fit inside the SVG
+    const scaleX = width / 32;
+    const scaleY = height / 64;
+    const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
+
+    const projection = d3.geoIdentity().scale(scale);
+    const path = d3.geoPath().projection(projection);
+
+    // Normalize data for better visualization
+    const dataMin = d3.min(data.flat());
+    const dataMax = d3.max(data.flat());
+    const normalizedData = data.map(row =>
+      row.map(v => (v - dataMin) / Math.max(dataMax - dataMin, 1e-6))
+    );
+
+    // Generate contour data
+    const contours = d3.contours()
+      .size([32, 64])
+      .thresholds(d3.range(0, 1.05, 0.025)) // Higher resolution
+      (normalizedData.flat());
+
+    // Define a color scale for the contour map
+    const color = d3.scaleSequential(colorScale).domain([0, 1]);
+
+    // Draw the contours within the group
+    g.append("g")
+      .attr("stroke", "black")
+      .selectAll("path")
+      .data(contours)
+      .join("path")
+      .attr("d", path)
+      .attr("fill", d => color(d.value))
+      .attr("stroke-width", 0.2)
+      .on("mouseover", function(event, d) {
+        tooltip.transition()
+          .duration(200)
+          .style("opacity", 0.9);
+        tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2))
+          .style("left", event.pageX + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", function() {
+        tooltip.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+  }
+
+  // Initial render
+  render();
+
+  // Set up zoom functionality on the SVG but transform the group 'g'
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 10])
+    .on("zoom", (event) => {
+      g.attr("transform", event.transform);
+    });
+
+  svg.call(zoom);
 
   // Resize observer to update if the SVG dimensions change
   const resizeObserver = new ResizeObserver(() => {
@@ -210,6 +330,9 @@ function createContourMap(svgId, data, colorScale) {
   });
   resizeObserver.observe(svg.node());
 }
+  
+
+  
 
 
 // Add event listeners to input fields

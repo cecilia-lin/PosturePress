@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // // Load data
 const jsonData = await d3.json("data/experiment1_data.json");
-// console.log(jsonData);
+/* // console.log(jsonData);
 // const width = window.innerWidth / 2;
 // const height = window.innerHeight / 2;
 // const gridWidth = 64;  // change grid size to fit data later 
-// const gridHeight = 32;
+// const gridHeight = 32; */
 
 var data_left = null;
 var data_right = null;
@@ -119,6 +119,19 @@ function createContourMap(svgId, data, colorScale) {
   const svg = d3.select(svgId)
     .attr("preserveAspectRatio", "xMinYMin meet");
 
+
+    // Create tooltip element
+  const tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("position", "absolute")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px")
+    .style("pointer-events", "none"); // To not interfere with mouse events
+
   function render() {
     const bbox = svg.node().getBoundingClientRect(); // Get actual size
     const width = bbox.width;
@@ -157,13 +170,25 @@ function createContourMap(svgId, data, colorScale) {
       .join("path")
       .attr("d", path) // Use correctly scaled projection
       .attr("fill", d => color(d.value))
-      .attr("stroke-width", 0.2); // Reduce stroke width for clarity
-      
+      .attr("stroke-width", 0.2) // Reduce stroke width for clarity
+      .on("mouseover", function(event, d) { // Mouseover event listener
+        tooltip.transition()
+          .duration(200)
+          .style("opacity", .9);
+        tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2)) // Show actual pressure value
+          .style("left", (event.pageX) + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) { // Mouseout event listener
+        tooltip.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
       
       // felix's changes
       // Add pressure readings as text elements
 
-      svg.selectAll("text")
+      /* svg.selectAll("text")
       .data(data.flat())
       .enter()
       .append("text")
@@ -173,7 +198,7 @@ function createContourMap(svgId, data, colorScale) {
       .attr("alignment-baseline", "middle")
       .attr("font-size", 8)
       .attr("fill", "white")
-      .text(d => d.toFixed(2));
+      .text(d => d.toFixed(2)); */
   }
 
   // Initial render
@@ -217,12 +242,12 @@ function handleInputChange() {
   }
 
   if (closestDataPoint) {
-    // data_left = closestDataPoint[1].Left;
+    /* // data_left = closestDataPoint[1].Left;
     // data_right = closestDataPoint[1].Right;
-    // sleep_back = closestDataPoint[1].Supine;
+    // sleep_back = closestDataPoint[1].Supine; */
 
     // felix's changes
-    updateCharts(jsonData, closestDataPoint);
+    updateCharts(jsonData, closestDataPoint[0]);
 
   };
   console.log(data_left);

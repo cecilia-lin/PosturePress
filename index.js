@@ -82,7 +82,7 @@ function createContourMap(svgId, data, colorScale) {
         tooltip.transition()
           .duration(200)
           .style("opacity", 0.9);
-        tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2))
+        tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2) + " mmHg")
           .style("left", event.pageX + "px")
           .style("top", (event.pageY - 28) + "px");
       })
@@ -98,7 +98,7 @@ function createContourMap(svgId, data, colorScale) {
 
   // Set up zoom functionality on the SVG but transform the group 'g'
   const zoom = d3.zoom()
-    .scaleExtent([0.5, 10])
+    .scaleExtent([1, 10])
     .on("zoom", (event) => {
       g.attr("transform", event.transform);
     });

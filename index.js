@@ -1,3 +1,13 @@
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
+
+// TODO 
+// find another function for the actual .txt values to be overlayed on the heatmap
+// convert the .txt files to svg/d3 friendly format
+
+const width = window.innerWidth / 2;
+const height = window.innerHeight / 2;
+const gridWidth = 64;  // change grid size to fit data later 
+const gridHeight = 32;
 
 var data_left = null;
 var data_right = null;

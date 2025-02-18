@@ -87,8 +87,8 @@ function createContourMap(svgId, data, colorScale) {
           .duration(200)
           .style("opacity", 0.9);
         tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2) + " mmHg")
-          .style("left", event.pageX + "px")
-          .style("top", (event.pageY - 28) + "px");
+          .style("left", (event.pageX + 10 ) + "px")
+          .style("top", (event.pageY - 38) + "px");
       })
       .on("mouseout", function() {
         tooltip.transition()

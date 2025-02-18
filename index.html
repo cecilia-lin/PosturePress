@@ -6,7 +6,7 @@
     <title>Posture Press</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v7.min.js" type="module"></script>
-    <link rel="icon" href="..\imgs\icon.png">
+    <link rel="icon" href="imgs\icon.png">
     <script src="global.js" type="module"></script>
     <script src="index.js" type="module"></script>
 </head>
@@ -14,23 +14,27 @@
 <body>
 
         <div class="title-screen">
-            <h1>PosturePress</h1>
-            <h3>Find your sleep posture to avoid bedsore</h3>
+            <div id = "title">
+            <h1 id = "title">PosturePress</h1>
+            <img src="imgs\sleep.png" alt="sleep" class="emoji">
+        </div>
+            <h3>Visualize and compare the pressure in the human body with different sleeping postures.</h3>
             
-            <p>Best to View This Website On Fullscreen</p>
             <p class="scroll-indicator">Scroll Down Slowly To Continue</p>
         </div>
         
        
 
         <div style="height: 20vh"></div>
+        
         <div class="text-section">
             <h2> Motivation</h2>
             <p>In-bed posture has been the subject of extensive research due to its significance on health. Different sleeping postures will lead to different pressures on individuals’ body parts. Long terms of bad sleeping posture might lead to poor sleeping quality and bad spinal health. Thus, with available sensor data recording the pressure when an individual is sleeping, we decided to
                 make interactive graphs that enable users to visualize and compare the pressure in the human body with different sleeping postures.
             </p>
 
-            <h2> Data Source</h2>
+            <h2> Data Transformation</h2>
+            <p> When you enter your height and weight, we find the subject with the closest weight and height as you to display. This is implemented using Euclidean distance.</p>
         </div>
 
     
@@ -68,7 +72,7 @@
                     </div>
                 </div>
 
-                <button class="reset">Reset</button>
+                <button class="reset" id="reset-button">Reset</button>
             </div>
             
             <div class="chart">

@@ -99,15 +99,15 @@ function createContourMap(svgId, data, colorScale) {
 
   // Initial render
   render();
-
   // Set up zoom functionality on the SVG but transform the group 'g'
   const zoom = d3.zoom()
     .scaleExtent([1, 10])
+    .translateExtent([[0, 0], [width, height]]) // Set translate extent to constrain panning
     .extent([[0, 0], [width, height]]) // Set extent to constrain zooming
-    .translateExtent([[0, 0], [width, height]])
     .on("zoom", (event) => {
       g.attr("transform", event.transform);
     });
+
   svg.call(zoom);
 
   // Resize observer to update if the SVG dimensions change

@@ -9,3 +9,13 @@ document.addEventListener("scroll", function () {
         titleScreen.classList.remove("hide-title");
     }
 });
+
+
+document.querySelectorAll(".input-container").forEach((container, index) => {
+    container.addEventListener("click", function () {
+        let hints = document.querySelectorAll(".hint p");
+        if (hints[index]) {
+            hints[index].classList.add("no-blink");
+        }
+    });
+});

@@ -15,51 +15,67 @@
         <div class="title-screen">
             <h1>PosturePress</h1>
             <h3>Find your sleep posture to avoid bedsore</h3>
+            <div class="text-section">
+                <p>Motivation</p>
+            </div>
             <p class="scroll-indicator">Scroll down to continue</p>
         </div>
         
-        <div class="text-section">
-            <p>Motivation</p>
-        </div>
+       
 
-        <div style="height: 500px"></div>
+        <div style="height: 50vh"></div>
 
-        <div class="hint">
-        <p> Enter Your Weight ↓ </p>
-        <p> Enter Your Height ↓</p>
-        </div>
-
-        <div class="weight-height-filter">
-            <div class="filter-box">
-                <div class="input-container">
-                    <input type="number" id="weight-number" name="weight-number" min="0" max="100" value="120">
-                    <span class="unit">kg</span>
-                </div>
-            </div>
-            
-            <div class="filter-box">
-                <div class="input-container">
-                    <input type="number" id="height-number" name="height-number" min="0" max="100" value="160">
-                    <span class="unit">cm</span>
-                </div>
-            </div>
     
-        </div>
         
 
+        
+        <div class="scale">
+            <p> Scale </p>
+            <div class="scale-box"> </div>
+            </div>
+        
+       
         <div class="charts-section">
+            <div class="ui" >               
+                <div class="weight-height-filter">
+                    <div class="hint">
+                        <p> Enter Your Weight ↓ </p>
+                        </div>
+                    <div class="filter-box">
+                        <div class="input-container">
+                            <input type="number" id="weight-number" name="weight-number" min="0" max="100" value="120">
+                            <span class="unit">kg</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hint">
+                        <p> Enter Your Height ↓ </p>
+                        </div>
+
+                    <div class="filter-box">
+                        <div class="input-container">
+                            <input type="number" id="height-number" name="height-number" min="0" max="100" value="160">
+                            <span class="unit">cm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="reset">Reset</button>
+            </div>
+            
             <div class="chart">
-                <h2>Sleeping on your Left</h2>
+                <h2>Sleeping On Your Left</h2>
                 <svg id="left"></svg>
             </div>
             <div class="chart">
-                <h2>Sleeping on Your Back</h2>
+                <h2>Sleeping On Your Back</h2>
                 <svg id="supine"></svg>
             </div>
             <div class="chart">
-                <h2>Sleeping on Your Right</h2>
+                <h2>Sleeping On Your Right</h2>
                 <svg id="right"></svg>
             </div> 
+
         </div>
 </body>
 

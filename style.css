@@ -1,26 +1,41 @@
 :root {
-    --color-background: oklch(30.69% 0 260.82);
+    --color-background: oklch(46.06% 0.0735 277.3);
     --color-light: oklch(98.04% 0.0042 13.06);
     --color-dark: oklch(53.6% 0.002 325.6);
+    --color-indicator: oklch(82.08% 0.0184 89.37);
   }
   
-html {
-    background-color: var(--color-background);
-}
 
 body {
-    font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-    margin: 0;
-    padding: 0;
     color: var(--color-darktext);
     scroll-behavior: smooth;
+}
+
+html, body {
+    font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-background);
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.visualization{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly; /* Distributes content evenly */
+    height: 100vh; /* Full screen height */
+    width: 90%;
 }
 
 .title-screen {
     position: fixed; 
     top: 0;
     width: 100%;
-    height: 100vh;
+    height:100vh;
     background-color: var(--color-background);
     color: var(--color-light);
     display: flex;
@@ -40,11 +55,10 @@ body {
     pointer-events: none;
 }
 
-/* Scroll indicator */
 .scroll-indicator {
     font-size: 18px;
     font-style: italic;
-    color: oklch(82.08% 0.0184 89.37);
+    color: var(--color-indicator);
     margin-top: 20px;
     animation: bounce 1.5s infinite;
 }
@@ -54,38 +68,44 @@ body {
     50% { transform: translateY(10px); }
 }
 
-/* Headings and text styling */
-h1 {
-    font-size: 2em;
-}
-
-p {
-    font-size: 1.2em;
-    color: #666;
+.visualization{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly; /* Distributes content evenly */
+    height: 100vh; /* Full screen height */
+    width: 90%;
 }
 
 .charts-section {
     display: flex;
     justify-content: space-between;
-    min-height: 10vh;
+    min-height: 30vh;
     gap: 2%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 5%;
+    margin: 5%;
+    box-sizing: border-box;
 }
 
+
 .chart {
-    width: 25%;
-    height: 50%;
+    width: 15%;
+    max-height: 70vh;
     background-color: var(--color-light);
-    padding: 20px;
+    padding: 3%;
     border-radius: 8px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    h2{
+        color: var(--color-dark);
+        margin: 0;
+        margin-bottom: 5%;
+    }
 }
+
+
 
 svg {
     width: 80%;  
@@ -97,20 +117,28 @@ svg {
     border-radius: 8px;
 }
 
+svg:hover {
+    outline: 5px solid var(--color-indicator);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .hint{
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    font-size: 20px;
-    padding-bottom: 0;
+    font-size: 100%;
     font-weight: bold;
+    width: 100%;
     
     p{
+        color: var(--color-indicator);
         margin: 0;
         opacity: 0;
         position: relative;
         transform: translateY(-10px); /* Start slightly above */
-        animation: blink 1.5s infinite ease-in-out;
+        animation: blink 2s infinite ease-in-out;
     }
 }
 
@@ -123,49 +151,59 @@ svg {
     }
 }
 
+/* Apply blinking animation only initially */
+.hint p {
+    color: var(--color-indicator);
+    margin: 0;
+    position: relative;
+    transform: translateY(-10px);
+    animation: blink 2s infinite ease-in-out;
+}
+
+/* Stop blinking when 'no-blink' class is added */
+.hint p.no-blink {
+    animation: none;
+    opacity: 1; /* Keep the hint visible */
+    color: var(--color-light)
+}
+
 .weight-height-filter {
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
-    padding: 10px;
     border-radius: 8px;
-    margin-bottom: 50px;
     width: 100%;
+    height: 55%;
 }
 
 .filter-box {
     display: flex;
     justify-content: column;
     align-items: center;
-    width: 250px;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.filter-box label {
-    margin-right: 10px;
-}
-
-.filter-box input {
-    padding: 5px;
-    border: 1px solid var(--color-dark);
-    border-radius: 4px;
     width: 100%;
+    border-radius: 8px;
 }
 
 .input-container {
     position: relative;
     width: 100%; 
+    padding-bottom: 30%;
     display: flex;
     align-items: center;
 }
 
+.input-container input:hover {
+    outline: 5px solid var(--color-indicator);
+    border-radius: 25px;
+}
+
 /* Make the input take up most of the width */
 .input-container input {
-    width: 100%; /* Expand input to full container */
+    width: 100%; 
     padding: 10px;
-    height: 50px; /* Taller input */
+    height: 30px;
     border: none;
-    border-radius: 25px; /* Rounded style */
+    border-radius: 20px;
     font-size: 18px;
     font-weight: bold;
     text-align: center;
@@ -173,7 +211,6 @@ svg {
     outline: none;
 }
 
-/* Unit text styling */
 .unit {
     position: absolute;
     right: 20%;
@@ -183,11 +220,45 @@ svg {
     opacity: 0.7;
 }
 
-/* Highlight effect when hovered */
 .unit:hover {
     opacity: 1;
+}
+
+.scale{
+    margin: auto;
+    background-color: var(--color-light);
+    border-radius: 20px;
+    width: 90%;
+    margin-bottom: 0;
+    justify-items: center;
+    height: auto;
+    padding: 10px;
+    p{
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--color-dark);
+    }
 }
 
 #left, #supine, #right {
     width: 100%;
   }
+
+.reset{
+    background-color: var(--color-indicator);
+    color: var(--color-light);
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.ui{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-bottom: 5%;
+}

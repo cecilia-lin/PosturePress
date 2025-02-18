@@ -22,20 +22,30 @@
             <p>Motivation</p>
         </div>
 
-        <div style="height: 500px; background-color: #222;">
+        <div style="height: 500px"></div>
+
+        <div class="hint">
+        <p> Enter Your Weight ↓ </p>
+        <p> Enter Your Height ↓</p>
         </div>
-        
+
         <div class="weight-height-filter">
             <div class="filter-box">
-                <label for="weight">Weight</label>
-                <input type="number" id="weight-number" name="weight-number" min="0" max="100" value="50" oninput="this.previousElementSibling.value = this.value">
+                <div class="input-container">
+                    <input type="number" id="weight-number" name="weight-number" min="0" max="100" value="120">
+                    <span class="unit">kg</span>
+                </div>
+            </div>
+            
+            <div class="filter-box">
+                <div class="input-container">
+                    <input type="number" id="height-number" name="height-number" min="0" max="100" value="160">
+                    <span class="unit">cm</span>
+                </div>
             </div>
     
-            <div class="filter-box">
-                <label for="height">Height</label>
-                <input type="number" id="height-number" name="height-number" min="0" max="100" value="50" oninput="this.previousElementSibling.value = this.value">
-            </div>
         </div>
+        
 
         <div class="charts-section">
             <div class="chart">

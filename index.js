@@ -103,10 +103,11 @@ function createContourMap(svgId, data, colorScale) {
   // Set up zoom functionality on the SVG but transform the group 'g'
   const zoom = d3.zoom()
     .scaleExtent([1, 10])
+    .extent([[0, 0], [width, height]]) // Set extent to constrain zooming
+    .translateExtent([[0, 0], [width, height]])
     .on("zoom", (event) => {
       g.attr("transform", event.transform);
     });
-
   svg.call(zoom);
 
   // Resize observer to update if the SVG dimensions change
@@ -181,25 +182,23 @@ document.addEventListener("DOMContentLoaded", function () {
         // Reset the contour map to the default subject key "S1"
         updateCharts(jsonData, "S1");
 
-        // Reset the zoom transform on the SVG elements and clear history content
-        const svgLeft = d3.select("#left");
-        const svgSupine = d3.select("#suspine");
-        const svgRight = d3.select("#right");
+        // Reset the zoom leve of the left SVG
+        const svg = d3.select("#left");
+        const zoom = createContourMap("#left", jsonData["S1"].Left, d3.interpolateWarm);
+        svg.call(zoom.transform, d3.zoomIdentity);
 
-        svgLeft.call(d3.zoom().transform, d3.zoomIdentity);
-        svgSupine.call(d3.zoom().transform, d3.zoomIdentity);
-        svgRight.call(d3.zoom().transform, d3.zoomIdentity);
+        // Reset the zoom leve of the center SVG
+        const svg2 = d3.select("#supine");
+        const zoom2 = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateWarm);
+        svg2.call(zoom2.transform, d3.zoomIdentity);
 
-        // Clear the history content and update the position immediately
-        svgLeft.select("g.zoom-container").selectAll("*").remove();
-        svgSupine.select("g.zoom-container").selectAll("*").remove();
-        svgRight.select("g.zoom-container").selectAll("*").remove();
+        // Reset the zoom leve of the right SVG
+        const svg3 = d3.select("#right");
+        const zoom3 = createContourMap("#right", jsonData["S1"].Right, d3.interpolateWarm);
+        svg3.call(zoom3.transform, d3.zoomIdentity);
 
-        // Re-render the plots to update the view
-        createContourMap("#left", jsonData["S1"].Left, d3.interpolateWarm);
-        createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateWarm);
-        createContourMap("#right", jsonData["S1"].Right, d3.interpolateWarm);
-      });
+      }
+      );
     });
 });
 
@@ -208,7 +207,6 @@ document.getElementById('weight-number').addEventListener('input', handleInputCh
 document.getElementById('height-number').addEventListener('input', handleInputChange);
 
 // TODO: Place Ash's pressure code here later
-
 
 
 

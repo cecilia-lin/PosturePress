@@ -101,6 +101,27 @@ function createContourMap(svgId, data, colorScale) {
     .scaleExtent([1, 10])
     .on("zoom", (event) => {
       g.attr("transform", event.transform);
+    })
+    .on("zoom", (event) => {
+      const transform = event.transform;
+
+      // Get the bounding box of the SVG container
+      const bbox = svg.node().getBoundingClientRect();
+      const width = bbox.width;
+      const height = bbox.height;
+
+      // Calculate the limits for panning
+      const xMin = Math.min(0, width - width * transform.k);
+      const xMax = Math.max(0, width * (1 - transform.k));
+      const yMin = Math.min(0, height - height * transform.k);
+      const yMax = Math.max(0, height * (1 - transform.k));
+
+      // Clamp translation values to prevent dragging out of bounds
+      const clampedX = Math.max(xMin, Math.min(xMax, transform.x));
+      const clampedY = Math.max(yMin, Math.min(yMax, transform.y));
+
+      // Apply the constrained transformation
+      g.attr("transform", `translate(${clampedX},${clampedY}) scale(${transform.k})`);
     });
 
   svg.call(zoom);

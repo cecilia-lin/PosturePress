@@ -1,19 +1,22 @@
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
-
-// TODO 
-// find another function for the actual .txt values to be overlayed on the heatmap
-// convert the .txt files to svg/d3 friendly format
-
+// Constants for dimensions
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
-const gridWidth = 64;  // change grid size to fit data later 
+const gridWidth = 64;  // Change grid size to fit data later
 const gridHeight = 32;
 
+// Variables to hold data
 var data_left = null;
 var data_right = null;
 var sleep_back = null;
-var jsonData = null;
+var jsonData = null; // Declare jsonData globally
 
+/**
+ * Function to create a contour map using D3
+ * @param {string} svgId - The ID of the SVG element
+ * @param {Array} data - The data to be visualized
+ * @param {function} colorScale - The color scale function
+ * @returns {d3.ZoomBehavior} - The zoom behavior associated with the SVG, for external reset if needed.
+ */
 function createContourMap(svgId, data, colorScale) {
   const svg = d3.select(svgId)
     .attr("preserveAspectRatio", "xMinYMin meet");
@@ -24,7 +27,8 @@ function createContourMap(svgId, data, colorScale) {
     g = svg.append("g").attr("class", "zoom-container");
   }
 
-  // Create tooltip element (remains unchanged)
+  // Create tooltip element
+  //
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0)
@@ -41,8 +45,8 @@ function createContourMap(svgId, data, colorScale) {
     const bbox = svg.node().getBoundingClientRect(); // Get actual size
     const width = bbox.width;
     const height = bbox.height;
-    
-    // Instead of removing all elements, clear only the contents of the zoom container
+
+    // Clear only the contents of the zoom container
     g.selectAll("*").remove();
 
     // Define a projection that ensures contours fit inside the SVG
@@ -83,8 +87,8 @@ function createContourMap(svgId, data, colorScale) {
           .duration(200)
           .style("opacity", 0.9);
         tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2) + " mmHg")
-          .style("left", event.pageX + "px")
-          .style("top", (event.pageY - 28) + "px");
+          .style("left", (event.pageX + 10 ) + "px")
+          .style("top", (event.pageY - 38) + "px");
       })
       .on("mouseout", function() {
         tooltip.transition()
@@ -131,16 +135,18 @@ function createContourMap(svgId, data, colorScale) {
     render();
   });
   resizeObserver.observe(svg.node());
+
+  return zoom; // Return the zoom behavior for reset function
 }
-  
-// Function to handle input changes on the weight and height
+
+/**
+ * Function to handle input changes on the weight and height
+ */
 function handleInputChange() {
   const weight = document.getElementById('weight-number').value;
   const height = document.getElementById('height-number').value;
 
-  // finding the closest data point in the JSON data
-  // update the pressureData array with the new data_left, data_right, and sleep_back values
-  
+  // Finding the closest data point in the JSON data
   let closestDataPoint = null;
   let minDistance = Infinity;
 
@@ -153,54 +159,21 @@ function handleInputChange() {
       minDistance = distance;
       closestDataPoint = [key, value];
     }
-
   }
 
   if (closestDataPoint) {
-    /* // data_left = closestDataPoint[1].Left;
-    // data_right = closestDataPoint[1].Right;
-    // sleep_back = closestDataPoint[1].Supine; */
-
-    // felix's changes
     updateCharts(jsonData, closestDataPoint[0]);
-
-  };
+  }
   console.log(data_left);
   console.log(data_right);
   console.log(sleep_back);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  fetch("data/experiment1_data.json")
-    .then(response => response.json())
-    .then(jsonData => {
-
-
-      // felix's changes
-      /* const subject = jsonData["S1"]; // Change as needed
-      createContourMap("#left", subject.Left, d3.interpolateWarm);
-      createContourMap("#supine", subject.Supine, d3.interpolateWarm);
-      createContourMap("#right", subject.Right, d3.interpolateWarm); */
-      updateCharts(jsonData, "S1");
-      
-      // Add event listeners to input fields for dynamic updates
-      document.getElementById('weight-number').addEventListener('input', () => handleInputChange(jsonData));
-      document.getElementById('height-number').addEventListener('input', () => handleInputChange(jsonData));
-
-    });
-});
-
-
-// // Load data
-var jsonData = await d3.json("data/experiment1_data.json");
-/* // console.log(jsonData);
-// const width = window.innerWidth / 2;
-// const height = window.innerHeight / 2;
-// const gridWidth = 64;  // change grid size to fit data later 
-// const gridHeight = 32; */
-
-
-// felix's changes
+/**
+ * Function to update charts based on the selected subject
+ * @param {Object} jsonData - The JSON data
+ * @param {string} subjectKey - The key of the selected subject
+ */
 function updateCharts(jsonData, subjectKey) {
   const subject = jsonData[subjectKey];
   createContourMap("#left", subject.Left, d3.interpolateWarm);
@@ -208,15 +181,53 @@ function updateCharts(jsonData, subjectKey) {
   createContourMap("#right", subject.Right, d3.interpolateWarm);
 }
 
+/**
+ * Resets the input fields, charts to default state (S1), and zoom levels.
+ */
+window.resetCharts = function(zoomLeft, zoomSupine, zoomRight) {
+    // Reset the input values to their original numbers
+    document.getElementById('weight-number').value = 120;
+    document.getElementById('height-number').value = 160;
+
+    // Reset the contour map to the default subject key "S1"
+    updateCharts(jsonData, "S1");
+
+    // Reset the zoom transform on the SVG elements
+    const svgLeft = d3.select("#left");
+    const svgSupine = d3.select("#supine");
+    const svgRight = d3.select("#right");
+
+    svgLeft.transition().duration(750).call(zoomLeft.transform, d3.zoomIdentity);
+    svgSupine.transition().duration(750).call(zoomSupine.transform, d3.zoomIdentity);
+    svgRight.transition().duration(750).call(zoomRight.transform, d3.zoomIdentity);
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("data/experiment1_data.json")
+    .then(response => response.json())
+    .then(data => {
+      jsonData = data; // Assign fetched data to global jsonData
+
+      // Initialize charts and get zoom behaviors
+      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, d3.interpolateWarm);
+      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateWarm);
+      const zoomRight = createContourMap("#right", jsonData["S1"].Right, d3.interpolateWarm);
+
+      // Add event listeners to input fields for dynamic updates
+      document.getElementById('weight-number').addEventListener('input', handleInputChange);
+      document.getElementById('height-number').addEventListener('input', handleInputChange);
+
+      // Add event listener to reset button, now calling the resetCharts function
+      document.querySelector('.reset').addEventListener('click', () => {
+        window.resetCharts(zoomLeft, zoomSupine, zoomRight); // Call the reset function, passing zoom behaviors
+      });
+    });
+});
 
 
-// Add event listeners to input fields
-document.getElementById('weight-number').addEventListener('input', handleInputChange);
-document.getElementById('height-number').addEventListener('input', handleInputChange);
-
-
-
-
+// Add event listeners to input fields (These are redundant, event listeners are already added inside DOMContentLoaded)
+// document.getElementById('weight-number').addEventListener('input', handleInputChange);
+// document.getElementById('height-number').addEventListener('input', handleInputChange);
 
 // TODO
 // place ash's pressure code here later

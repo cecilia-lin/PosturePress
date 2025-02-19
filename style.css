@@ -247,16 +247,13 @@ svg:hover {
 .unit:hover {
     opacity: 1;
 }
-
 .scale {
     display: flex;
     flex-direction: column;
     background-color: var(--color-light);
     border-radius: 20px;
     width: 66%; /* Adjust width to make the scale box longer */
-    margin-left: auto; /* Align to the right */
-    margin-right: 10%; /* Add margin to the right */
-    margin-bottom: 20px; /* Add margin to separate from charts */
+    margin: 0 auto 20px auto; /* Center the scale and add margin to the bottom */
     justify-items: center;
     align-items: center;
     text-align: center;

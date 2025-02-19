@@ -9,7 +9,11 @@ const gridWidth = 64;  // Change grid size to fit data later
 const gridHeight = 32;
 
 // Variables to hold color scales
-const colorScale = d3.interpolateMagma;
+// Variables to hold color scales
+const colorScale = d3.scaleQuantize()
+  .domain([0, 1])
+  .range(d3.schemeRdBu[9].reverse());
+// const colorScale3 = d
 
 // Variables to hold data
 var data_left = null;
@@ -299,64 +303,64 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 });
+function createLegend() {
+  const scaleBox = d3.select(".scale-box");
 
-function createLegend(colorScale) {
-    const scaleBox = d3.select(".scale-box");
+  function renderLegend() {
+    // Clear any existing SVG elements
+    scaleBox.selectAll("svg").remove();
 
-    function renderLegend() {
-        // Clear any existing SVG elements
-        scaleBox.selectAll("svg").remove();
+    const legendWidth = scaleBox.node().getBoundingClientRect().width - 20; // Adjust width dynamically, accounting for padding
+    const legendHeight = 20;
+    const marginLeft = 20; // Add margin to the left
+    const marginRight = 30; // Add margin to the right
 
-        const legendWidth = scaleBox.node().getBoundingClientRect().width - 20; // Adjust width dynamically, accounting for padding
-        const legendHeight = 20;
-        const marginLeft = 20; // Add margin to the left
+    const svg = scaleBox.append("svg")
+      .attr("width", legendWidth + marginLeft + marginRight) // Adjust width to include left and right margins
+      .attr("height", legendHeight + 30)
+      .style("display", "block"); // Ensure the SVG is displayed as a block element
 
-        const svg = scaleBox.append("svg")
-            .attr("width", legendWidth + marginLeft) // Adjust width to include left margin
-            .attr("height", legendHeight + 30)
-            .style("display", "block"); // Ensure the SVG is displayed as a block element
+    const defs = svg.append("defs");
+    
+    const gradient = defs.append("linearGradient")
+      .attr("id", "legend-gradient")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "100%").attr("y2", "0%");
 
-        const defs = svg.append("defs");
-        
-        const gradient = defs.append("linearGradient")
-            .attr("id", "legend-gradient")
-            .attr("x1", "0%").attr("y1", "0%")
-            .attr("x2", "100%").attr("y2", "0%");
+    const stops = d3.range(0, 1.05, 0.2);
+    stops.forEach(d => {
+      gradient.append("stop")
+        .attr("offset", `${d * 100}%`)
+        .attr("stop-color", colorScale(d));
+    });
 
-        const stops = d3.range(0, 1.05, 0.2);
-        stops.forEach(d => {
-            gradient.append("stop")
-                .attr("offset", `${d * 100}%`)
-                .attr("stop-color", colorScale(d));
-        });
+    svg.append("rect")
+      .attr("x", marginLeft) // Add margin to the left
+      .attr("y", 10)
+      .attr("width", legendWidth - marginLeft - marginRight) // Adjust width to account for left and right margins
+      .attr("height", legendHeight)
+      .style("fill", "url(#legend-gradient)");
 
-        svg.append("rect")
-            .attr("x", marginLeft) // Add margin to the left
-            .attr("y", 10)
-            .attr("width", legendWidth - marginLeft) // Adjust width to account for left margin
-            .attr("height", legendHeight)
-            .style("fill", "url(#legend-gradient)");
+    const axisScale = d3.scaleLinear()
+      .domain([0, 200])
+      .range([marginLeft, legendWidth - marginRight]); // Adjust range to account for left and right margins
 
-        const axisScale = d3.scaleLinear()
-            .domain([0, 1])
-            .range([marginLeft, legendWidth]); // Adjust range to account for left margin
+    const axis = d3.axisBottom(axisScale)
+      .ticks(5)
+      .tickFormat(d3.format(".2f"));
 
-        const axis = d3.axisBottom(axisScale)
-            .ticks(5)
-            .tickFormat(d3.format(".2f"));
+    const axisGroup = svg.append("g")
+      .attr("transform", `translate(0, ${legendHeight + 10})`)
+      .call(axis);
 
-        const axisGroup = svg.append("g")
-            .attr("transform", `translate(0, ${legendHeight + 10})`)
-            .call(axis);
+    // Increase the font size of the axis labels and ticks
+    axisGroup.selectAll("text")
+      .style("font-size", "14px"); // Adjust the font size as needed
+  }
 
-        // Increase the font size of the axis labels and ticks
-        axisGroup.selectAll("text")
-            .style("font-size", "14px"); // Adjust the font size as needed
-    }
+  // Initial render
+  renderLegend();
 
-    // Initial render
-    renderLegend();
-
-    // Add resize event listener to re-render the legend on window resize
-    window.addEventListener("resize", renderLegend);
+  // Add resize event listener to re-render the legend on window resize
+  window.addEventListener("resize", renderLegend);
 }

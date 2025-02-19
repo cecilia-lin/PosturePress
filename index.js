@@ -27,9 +27,15 @@ function createContourMap(svgId, data, colorScale) {
     g = svg.append("g").attr("class", "zoom-container");
   }
 
+
+  // Remove any existing tooltip for this chart
+  // d3.select(`${svgId}-tooltip`).remove();
+
+
   // Create tooltip element
   //
   const tooltip = d3.select("body").append("div")
+    // .attr("id", `${svgId}-tooltip`)
     .attr("class", "tooltip")
     .style("opacity", 0)
     .style("position", "absolute")
@@ -146,6 +152,8 @@ function handleInputChange() {
   const weight = document.getElementById('weight-number').value;
   const height = document.getElementById('height-number').value;
 
+  d3.selectAll(".tooltip").remove();
+
   // Finding the closest data point in the JSON data
   let closestDataPoint = null;
   let minDistance = Infinity;
@@ -175,6 +183,9 @@ function handleInputChange() {
  * @param {string} subjectKey - The key of the selected subject
  */
 function updateCharts(jsonData, subjectKey) {
+  d3.selectAll(".tooltip").remove();
+
+
   const subject = jsonData[subjectKey];
   createContourMap("#left", subject.Left, d3.interpolateWarm);
   createContourMap("#supine", subject.Supine, d3.interpolateWarm);

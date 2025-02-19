@@ -52,6 +52,14 @@ One challenge we faced was implementing the color scale for our contour map, whi
 The core issue is the rendering of the SVG object, as we struggled to fit it aesthetically to the exact dimensions of the bounding box. Specifically, it has a problem integrating with the flex box object in the HTML. Therefore, we needed to move back and forth between HTML and JavaScript to figure out the issue.
 Another challenge we encountered was creating a contour map. To make sure the contour map scale is according to the size of the window, we need to find a way to access the size of the window and the related object and rescale the plot accordingly. We resolve the issue by calling “svg.node().getBoundingClientRect()” 
 
+# Time BreakDown
+Time Breakdown:
+Meeting: 5 hrs
+Website design: 20 hrs
+Write Up: 2 hrs
+
+
+
 
 # Citation
 M. Baran Pouyan, J. Birjandtalab, M. Heydarzadeh, M. Nourani, S. Ostadabbas. A pressure map dataset for posture and subject analytics. 2017 IEEE EMBS International Conference on Biomedical & Health Informatics (BHI). DOI: 10.1109/BHI.2017.7897206.

@@ -3,7 +3,7 @@
     --color-light: oklch(98.04% 0.0042 13.06);
     --color-dark: oklch(53.6% 0.002 325.6);
     --color-indicator: oklch(82.08% 0.0184 89.37);
-}
+  }
 
 body {
     color: var(--color-darktext);
@@ -25,7 +25,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly; /* Distributes content evenly */
     height: 100vh; /* Full screen height */
     width: 90%;
 }
@@ -51,6 +51,7 @@ html, body {
         margin: 5%;
     }
 }
+
 
 /* Hide title screen when scrolled */
 .hide-title {
@@ -109,6 +110,7 @@ html, body {
     box-sizing: border-box;
 }
 
+
 .chart {
     width: 20%;
     max-height: 70vh;
@@ -127,6 +129,8 @@ html, body {
         margin-bottom: 3%;
     }
 }
+
+
 
 svg {
     width: 80%;  
@@ -245,15 +249,12 @@ svg:hover {
 }
 
 .scale{
-    display: flex;
-    flex-direction: column;
+    margin: auto;
     background-color: var(--color-light);
     border-radius: 20px;
     width: 90%;
-    margin: 0 auto;
+    margin-bottom: 0;
     justify-items: center;
-    align-items: center;
-    text-align: center;
     height: auto;
     padding: 10px;
     p{
@@ -265,9 +266,9 @@ svg:hover {
 
 #left, #supine, #right {
     width: 100%;
-}
+  }
 
-.reset {
+.reset{
     background-color: var(--color-indicator);
     color: var(--color-light);
     border: none;
@@ -280,36 +281,19 @@ svg:hover {
     outline: none;
 }
 
-.reset:hover {
-    outline: 5px solid var(--color-light); /* Add white margin on hover */
-    border-radius: 25px;
-}
-
-.ui {
+.ui{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     margin-bottom: 5%;
 }
 
-.text-section {
+.text-section{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     color: var(--color-light);
     padding: 5%;
-}
-
-.scale-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    background-color: var(--color-light);
-    border-radius: 0px;
-    width: 100%;
-    padding: 0%;
-    margin-bottom: 5%;
 }
 

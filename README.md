@@ -53,10 +53,9 @@ The core issue is the rendering of the SVG object, as we struggled to fit it aes
 Another challenge we encountered was creating a contour map. To make sure the contour map scale is according to the size of the window, we need to find a way to access the size of the window and the related object and rescale the plot accordingly. We resolve the issue by calling “svg.node().getBoundingClientRect()” 
 
 # Time BreakDown
-Time Breakdown:
-Meeting: 5 hrs
-Website design: 20 hrs
-Write Up: 2 hrs
+- Meeting: 5 hrs
+- Website design: 20 hrs
+- Write Up: 2 hrs
 
 
 

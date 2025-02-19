@@ -1,299 +1,213 @@
-:root {
-    --color-background: oklch(46.06% 0.0735 277.3);
-    --color-light: oklch(98.04% 0.0042 13.06);
-    --color-dark: oklch(53.6% 0.002 325.6);
-    --color-indicator: oklch(82.08% 0.0184 89.37);
-  }
-
+/* General styling */
 body {
-    color: var(--color-darktext);
-    scroll-behavior: smooth;
-}
-
-html, body {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--color-background);
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden; /* Prevents horizontal scrolling */
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background: #f0f0f0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+
+
+/* Navigation */
+nav {
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+nav a {
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    transition: 0.2s ease-in-out;
+}
+
+
+
+nav a.current {
+    font-weight: bold;
+    border-bottom: 2px solid #007BFF;
+}
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.charts-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
     box-sizing: border-box;
 }
 
-.visualization{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly; /* Distributes content evenly */
-    height: 100vh; /* Full screen height */
-    width: 90%;
-}
-
-.title-screen {
-    position: fixed; 
-    top: 0;
-    width: 100%;
-    height:100vh;
-    background-color: var(--color-background);
-    color: var(--color-light);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 100;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    h3{
-        font-size: 150%;
-        font-style: oblique;
-        font-weight: bold;
-        margin: 5%;
-    }
-}
 
 
-/* Hide title screen when scrolled */
-.hide-title {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.scroll-indicator {
-    font-size: 18px;
-    font-style: italic;
-    color: var(--color-indicator);
-    margin-top: 20px;
-    animation: bounce 1.5s infinite;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(10px); }
-}
-
-#title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5%;
-    font-weight: bold;
-    margin-bottom: 5%;
-    font-family: 'Trebuchet MS';
-    font-size: 200%;
-}
-
-.emoji{
-    max-width: 80px;
-    height: auto;
-}
-
-.visualization{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly; /* Distributes content evenly */
-    height: 100vh; /* Full screen height */
-    width: 90%;
+/* .text-section {
+    margin-bottom: 40px;
 }
 
 .charts-section {
     display: flex;
     justify-content: space-between;
-    min-height: 30vh;
-    gap: 2%;
-    margin-top: 3%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 5%;
+}
+
+.container {
+    width: 100%; 
+    height: 100vh; 
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+} */
+
+
+/* Container that holds your main content */
+.container {
+    display: flex;
+    flex-direction: column; /* Ensures children are stacked vertically */
+    align-items: center;
+    width: 100%; /* Adjust width as needed */
+    padding-top: 80px; /* For the fixed navigation bar */
+}
+
+/* Text section styles ensuring vertical stacking */
+.text-section {
+    width: 100%; /* Full width */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.charts-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row; /* Default is row, adjust if needed */
+    width: 100%;
+    height: 100vh;
     box-sizing: border-box;
 }
 
 
+
+/* Headings and text styling */
+h1 {
+    font-size: 2em;
+}
+
+p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.title-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+
+
 .chart {
-    width: 20%;
-    max-height: 70vh;
-    background-color: var(--color-light);
-    padding: 3%;
+    width: 32%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     border-radius: 8px;
-    text-align: center;
+}
+
+/* ashley's work------------------------ */
+/* Root styles */
+/* html {
+    --color-accent: oklch(50% 0.12 170);
+    color-scheme: light dark;
+} */
+
+/* Base body styles */
+/* body {
+    font: 100%/1.5 system-ui;
+    max-width: 100ch;
+    margin-inline: max(4em, (100% - 100ch) / 2);
+    padding-inline: 4em;
+    accent-color: var(--color-accent);
+} */
+
+/* Navigation */
+/* nav {
+    --border-color: oklch(50% 10% 200 / 40%);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-between;
-    h2{
-        color: var(--color-dark);
-        font-size: 100%;
-        margin: 0;
-        margin-bottom: 3%;
-    }
 }
 
-
-
-svg {
-    width: 80%;  
-    aspect-ratio: 1 / 2; 
-    background-color: var(--color-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-}
-
-svg:hover {
-    outline: 5px solid var(--color-indicator);
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.hint{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    font-size: 100%;
-    font-weight: bold;
-    width: 100%;
-    
-    p{
-        color: var(--color-indicator);
-        margin: 0;
-        opacity: 0;
-        position: relative;
-        transform: translateY(-10px); /* Start slightly above */
-        animation: blink 2s infinite ease-in-out;
-    }
-}
-
-@keyframes blink {
-    0%, 100% {
-        opacity: 1; /* Fully visible */
-    }
-    50% {
-        opacity: 0; /* Hidden */
-    }
-}
-
-/* Apply blinking animation only initially */
-.hint p {
-    color: var(--color-indicator);
-    margin: 0;
-    position: relative;
-    transform: translateY(-10px);
-    animation: blink 2s infinite ease-in-out;
-}
-
-/* Stop blinking when 'no-blink' class is added */
-.hint p.no-blink {
-    animation: none;
-    opacity: 1; /* Keep the hint visible */
-    color: var(--color-light)
-}
-
-.weight-height-filter {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    border-radius: 8px;
-    width: 100%;
-}
-
-.filter-box {
-    display: flex;
-    justify-content: column;
-    align-items: center;
-    width: 100%;
-    border-radius: 8px;
-}
-
-.input-container {
-    position: relative;
-    width: 100%; 
-    padding-bottom: 15%;
-    display: flex;
-    align-items: center;
-}
-
-.input-container input:hover {
-    outline: 5px solid var(--color-indicator);
-    border-radius: 25px;
-}
-
-/* Make the input take up most of the width */
-.input-container input {
-    width: 100%; 
-    padding: 10px;
-    height: 30px;
-    border: none;
-    border-radius: 20px;
-    font-size: 18px;
-    font-weight: bold;
+nav a {
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
     text-align: center;
-    background-color: white;
-    outline: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    border-bottom: 0.2rem solid transparent;
+    transition: 0.2s ease-in-out;
+    margin-bottom: auto;
 }
 
-.unit {
-    position: absolute;
-    right: 20%;
-    font-size: 100%;
-    font-weight: bold;
-    color: var(--color-dark);
-    opacity: 0.7;
+nav a:hover {
+    background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
+    border-bottom-color: var(--border-color);
+    border-bottom-width: 0.4em;
+    padding-bottom: 0.4em;
+}
+*/
+nav a.current {
+    border-bottom-width: 0.4em;
+    border-bottom-color: var(--color-accent);
+    padding-bottom: 0.4em;
+}  
+
+/* List styles */
+/* ul li {
+    display: contents;
+} */
+
+/* Make sure form elements inherit font */
+
+
+
+/* select,
+input,
+textarea,
+button {
+    font-family: inherit;
 }
 
-.unit:hover {
-    opacity: 1;
-}
-
-.scale{
-    margin: auto;
-    background-color: var(--color-light);
-    border-radius: 20px;
-    width: 90%;
-    margin-bottom: 0;
-    justify-items: center;
-    height: auto;
-    padding: 10px;
-    p{
-        font-size: 20px;
-        font-weight: bold;
-        color: var(--color-dark);
-    }
-}
-
-#left, #supine, #right {
-    width: 100%;
-  }
-
-.reset{
-    background-color: var(--color-indicator);
-    color: var(--color-light);
-    border: none;
-    border-radius: 20px;
-    width: 100%;
-    padding: 10%;
-    font-size: 100%;
-    font-weight: semi-bold;
-    cursor: pointer;
-    outline: none;
-}
-
-.ui{
+.container {
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    margin-bottom: 5%;
-}
-
-.text-section{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
     align-items: center;
-    color: var(--color-light);
-    padding: 5%;
-}
-
+    gap: 20px;
+} */

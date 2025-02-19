@@ -1,13 +1,20 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
+// TODO 
+// find another function for the actual .txt values to be overlayed on the heatmap
+// convert the .txt files to svg/d3 friendly format
 
-// Constants for dimensions
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
+const gridWidth = 64;  // Change grid size to fit data later
+const gridHeight = 32;
 
 // Variables to hold color scales
 const colorScale = d3.interpolateMagma;
 
 // Variables to hold data
+var data_left = null;
+var data_right = null;
+var sleep_back = null;
 var jsonData = null; // Declare jsonData globally
 
 /**
@@ -15,6 +22,7 @@ var jsonData = null; // Declare jsonData globally
  * @param {string} svgId - The ID of the SVG element
  * @param {Array} data - The data to be visualized
  * @param {function} colorScale - The color scale function
+ * @returns {d3.ZoomBehavior} - The zoom behavior associated with the SVG, for external reset if needed.
  */
 function createContourMap(svgId, data, colorScale) {
   const svg = d3.select(svgId)
@@ -26,8 +34,15 @@ function createContourMap(svgId, data, colorScale) {
     g = svg.append("g").attr("class", "zoom-container");
   }
 
+
+  // Remove any existing tooltip for this chart
+  // d3.select(`${svgId}-tooltip`).remove();
+
+
   // Create tooltip element
+  //
   const tooltip = d3.select("body").append("div")
+    // .attr("id", `${svgId}-tooltip`)
     .attr("class", "tooltip")
     .style("opacity", 0)
     .style("position", "absolute")
@@ -43,7 +58,7 @@ function createContourMap(svgId, data, colorScale) {
     const bbox = svg.node().getBoundingClientRect(); // Get actual size
     const width = bbox.width;
     const height = bbox.height;
-    
+
     // Clear only the contents of the zoom container
     g.selectAll("*").remove();
 
@@ -97,11 +112,10 @@ function createContourMap(svgId, data, colorScale) {
 
   // Initial render
   render();
+
   // Set up zoom functionality on the SVG but transform the group 'g'
   const zoom = d3.zoom()
     .scaleExtent([1, 10])
-    .translateExtent([[0, 0], [width, height]]) // Set translate extent to constrain panning
-    .extent([[0, 0], [width, height]]) // Set extent to constrain zooming
     .on("zoom", (event) => {
       g.attr("transform", event.transform);
     })
@@ -127,7 +141,7 @@ function createContourMap(svgId, data, colorScale) {
       g.attr("transform", `translate(${clampedX},${clampedY}) scale(${transform.k})`);
     });
 
-  svg.call(zoom);
+svg.call(zoom);
 
   // Resize observer to update if the SVG dimensions change
   const resizeObserver = new ResizeObserver(() => {
@@ -135,8 +149,7 @@ function createContourMap(svgId, data, colorScale) {
   });
   resizeObserver.observe(svg.node());
 
-  // Return the zoom object for resetting zoom later
-  return zoom;
+  return zoom; // Return the zoom behavior for reset function
 }
 
 /**
@@ -194,6 +207,9 @@ function handleInputChange() {
  * @param {string} subjectKey - The key of the selected subject
  */
 function updateCharts(jsonData, subjectKey) {
+  d3.selectAll(".tooltip").remove();
+
+
   const subject = jsonData[subjectKey];
   createContourMap("#left", subject.Left, colorScale);
   createContourMap("#supine", subject.Supine, colorScale);

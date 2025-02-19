@@ -182,6 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       jsonData = data; // Assign fetched data to global jsonData
       updateCharts(jsonData, "S1");
+      createLegend(d3.interpolateWarm);
       
       // Add event listeners to input fields for dynamic updates
       document.getElementById('weight-number').addEventListener('input', handleInputChange);
@@ -257,6 +258,50 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 });
+
+function createLegend(colorScale) {
+    const scaleBox = d3.select(".scale-box");
+
+    const legendWidth = 300, legendHeight = 20;
+
+    const svg = scaleBox.append("svg")
+        .attr("width", legendWidth)
+        .attr("height", legendHeight + 30);
+
+    const defs = svg.append("defs");
+    
+    const gradient = defs.append("linearGradient")
+        .attr("id", "legend-gradient")
+        .attr("x1", "0%").attr("y1", "0%")
+        .attr("x2", "100%").attr("y2", "0%");
+
+    const stops = d3.range(0, 1.05, 0.2);
+    stops.forEach((d, i) => {
+        gradient.append("stop")
+            .attr("offset", `${d * 100}%`)
+            .attr("stop-color", colorScale(d));
+    });
+
+    svg.append("rect")
+        .attr("x", 0)
+        .attr("y", 10)
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .style("fill", "url(#legend-gradient)");
+
+    const axisScale = d3.scaleLinear()
+        .domain([0, 1])
+        .range([0, legendWidth]);
+
+    const axis = d3.axisBottom(axisScale)
+        .ticks(5)
+        .tickFormat(d3.format(".2f"));
+
+    svg.append("g")
+        .attr("transform", `translate(0, ${legendHeight + 10})`)
+        .call(axis);
+}
+
 
 
 // Add event listeners to input fields (These are redundant, event listeners are already added inside DOMContentLoaded)

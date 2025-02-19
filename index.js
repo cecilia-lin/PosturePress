@@ -140,27 +140,49 @@ function createContourMap(svgId, data, colorScale) {
  * Function to handle input changes on the weight and height
  */
 function handleInputChange() {
-  const weight = document.getElementById('weight-number').value;
-  const height = document.getElementById('height-number').value;
+    const weightElement = document.getElementById('weight-number');
+    const heightElement = document.getElementById('height-number');
+    const weightWarning = document.getElementById('weight-hint');
+    const heightWarning = document.getElementById('height-hint');
 
-  // Finding the closest data point in the JSON data
-  let closestDataPoint = null;
-  let minDistance = Infinity;
+    const weight = parseFloat(weightElement.value);
+    const height = parseFloat(heightElement.value);
 
-  for (const [key, value] of Object.entries(jsonData)) {
-    const float_weight = parseFloat(value.weight);
-    const float_height = parseFloat(value.height);
-    const distance = Math.sqrt((float_weight - weight) ** 2 + (float_height - height) ** 2);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestDataPoint = [key, value];
+    if (isNaN(weight) || weight < 20 || weight > 150) {
+      // change the text and color it red
+      weightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 20 ~ 150 <br> ↓ </p>";
+      weightElement.style.backgroundColor = 'lightcoral';
+    } else {
+      weightWarning.innerHTML = "<p> Enter Your Weight <br> ↓ </p>";
+      weightElement.style.backgroundColor = '';
     }
-  }
 
-  if (closestDataPoint) {
-    updateCharts(jsonData, closestDataPoint[0]);
-  }
+    if (isNaN(height) || height < 130 || height > 250) {
+      heightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 130 ~ 250 <br> ↓ </p>";
+      heightElement.style.backgroundColor = 'lightcoral';
+    } else {
+      heightWarning.innerHTML = "<p> Enter Your Height <br> ↓ </p>";
+      heightElement.style.backgroundColor = '';
+    }
+
+    // Finding the closest data point in the JSON data
+    let closestDataPoint = null;
+    let minDistance = Infinity;
+
+    for (const [key, value] of Object.entries(jsonData)) {
+        const float_weight = parseFloat(value.weight);
+        const float_height = parseFloat(value.height);
+        const distance = Math.sqrt((float_weight - weight) ** 2 + (float_height - height) ** 2);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestDataPoint = [key, value];
+        }
+    }
+
+    if (closestDataPoint) {
+        updateCharts(jsonData, closestDataPoint[0]);
+    }
 }
 
 /**
@@ -257,6 +279,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 });
+
+
 
 
 // Add event listeners to input fields (These are redundant, event listeners are already added inside DOMContentLoaded)

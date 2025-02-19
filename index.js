@@ -170,9 +170,9 @@ function handleInputChange() {
  */
 function updateCharts(jsonData, subjectKey) {
   const subject = jsonData[subjectKey];
-  createContourMap("#left", subject.Left, d3.interpolatePlasma);
-  createContourMap("#supine", subject.Supine, d3.interpolatePlasma);
-  createContourMap("#right", subject.Right, d3.interpolatePlasma);
+  createContourMap("#left", subject.Left, d3.interpolateRainbow);
+  createContourMap("#supine", subject.Supine, d3.interpolateRainbow);
+  createContourMap("#right", subject.Right, d3.interpolateRainbow);
 }
 
 // Event listener for DOM content loaded
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       jsonData = data; // Assign fetched data to global jsonData
       updateCharts(jsonData, "S1");
-      createLegend(d3.interpolatePlasma);
+      createLegend(d3.interpolateRainbow);
       
       // Add event listeners to input fields for dynamic updates
       document.getElementById('weight-number').addEventListener('input', handleInputChange);
@@ -198,17 +198,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Reset the zoom leve of the left SVG
         const svg = d3.select("#left");
-        const zoom = createContourMap("#left", jsonData["S1"].Left, d3.interpolateWarm);
+        const zoom = createContourMap("#left", jsonData["S1"].Left, d3.interpolateRainbow);
         svg.call(zoom.transform, d3.zoomIdentity);
 
         // Reset the zoom leve of the center SVG
         const svg2 = d3.select("#supine");
-        const zoom2 = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateWarm);
+        const zoom2 = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateRainbow);
         svg2.call(zoom2.transform, d3.zoomIdentity);
 
         // Reset the zoom leve of the right SVG
         const svg3 = d3.select("#right");
-        const zoom3 = createContourMap("#right", jsonData["S1"].Right, d3.interpolateWarm);
+        const zoom3 = createContourMap("#right", jsonData["S1"].Right, d3.interpolateRainbow);
         svg3.call(zoom3.transform, d3.zoomIdentity);
 
       }
@@ -244,9 +244,9 @@ document.addEventListener("DOMContentLoaded", function () {
       jsonData = data; // Assign fetched data to global jsonData
 
       // Initialize charts and get zoom behaviors
-      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, d3.interpolateWarm);
-      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateWarm);
-      const zoomRight = createContourMap("#right", jsonData["S1"].Right, d3.interpolateWarm);
+      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, d3.interpolateRainbow);
+      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateRainbow);
+      const zoomRight = createContourMap("#right", jsonData["S1"].Right, d3.interpolateRainbow);
 
       // Add event listeners to input fields for dynamic updates
       document.getElementById('weight-number').addEventListener('input', handleInputChange);

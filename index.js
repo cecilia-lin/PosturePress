@@ -4,6 +4,9 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
 
+// Variables to hold color scales
+const colorScale = d3.interpolateMagma;
+
 // Variables to hold data
 var jsonData = null; // Declare jsonData globally
 
@@ -150,18 +153,18 @@ function handleInputChange() {
 
     if (isNaN(weight) || weight < 20 || weight > 150) {
       // change the text and color it red
-      weightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 20 ~ 150 <br> ↓ </p>";
+      weightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 20 ~ 150</p>";
       weightElement.style.backgroundColor = 'lightcoral';
     } else {
-      weightWarning.innerHTML = "<p> Enter Your Weight <br> ↓ </p>";
+      weightWarning.innerHTML = "<p> Enter Your Weight ↓</p>";
       weightElement.style.backgroundColor = '';
     }
 
     if (isNaN(height) || height < 130 || height > 250) {
-      heightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 130 ~ 250 <br> ↓ </p>";
+      heightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 130 ~ 250</p>";
       heightElement.style.backgroundColor = 'lightcoral';
     } else {
-      heightWarning.innerHTML = "<p> Enter Your Height <br> ↓ </p>";
+      heightWarning.innerHTML = "<p> Enter Your Height ↓</p>";
       heightElement.style.backgroundColor = '';
     }
 
@@ -192,9 +195,9 @@ function handleInputChange() {
  */
 function updateCharts(jsonData, subjectKey) {
   const subject = jsonData[subjectKey];
-  createContourMap("#left", subject.Left, d3.interpolateRainbow);
-  createContourMap("#supine", subject.Supine, d3.interpolateRainbow);
-  createContourMap("#right", subject.Right, d3.interpolateRainbow);
+  createContourMap("#left", subject.Left, colorScale);
+  createContourMap("#supine", subject.Supine, colorScale);
+  createContourMap("#right", subject.Right, colorScale);
 }
 
 // Event listener for DOM content loaded
@@ -220,17 +223,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Reset the zoom leve of the left SVG
         const svg = d3.select("#left");
-        const zoom = createContourMap("#left", jsonData["S1"].Left, d3.interpolateRainbow);
+        const zoom = createContourMap("#left", jsonData["S1"].Left, colorScale);
         svg.call(zoom.transform, d3.zoomIdentity);
 
         // Reset the zoom leve of the center SVG
         const svg2 = d3.select("#supine");
-        const zoom2 = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateRainbow);
+        const zoom2 = createContourMap("#supine", jsonData["S1"].Supine, colorScale);
         svg2.call(zoom2.transform, d3.zoomIdentity);
 
         // Reset the zoom leve of the right SVG
         const svg3 = d3.select("#right");
-        const zoom3 = createContourMap("#right", jsonData["S1"].Right, d3.interpolateRainbow);
+        const zoom3 = createContourMap("#right", jsonData["S1"].Right, colorScale);
         svg3.call(zoom3.transform, d3.zoomIdentity);
 
       }
@@ -266,9 +269,9 @@ document.addEventListener("DOMContentLoaded", function () {
       jsonData = data; // Assign fetched data to global jsonData
 
       // Initialize charts and get zoom behaviors
-      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, d3.interpolateRainbow);
-      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateRainbow);
-      const zoomRight = createContourMap("#right", jsonData["S1"].Right, d3.interpolateRainbow);
+      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, colorScale);
+      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, colorScale);
+      const zoomRight = createContourMap("#right", jsonData["S1"].Right, colorScale);
 
       // Add event listeners to input fields for dynamic updates
       document.getElementById('weight-number').addEventListener('input', handleInputChange);
@@ -284,50 +287,60 @@ document.addEventListener("DOMContentLoaded", function () {
 function createLegend(colorScale) {
     const scaleBox = d3.select(".scale-box");
 
-    const legendWidth = 300, legendHeight = 20;
+    function renderLegend() {
+        // Clear any existing SVG elements
+        scaleBox.selectAll("svg").remove();
 
-    const svg = scaleBox.append("svg")
-        .attr("width", legendWidth)
-        .attr("height", legendHeight + 30);
+        const legendWidth = scaleBox.node().getBoundingClientRect().width - 20; // Adjust width dynamically, accounting for padding
+        const legendHeight = 20;
+        const marginLeft = 20; // Add margin to the left
 
-    const defs = svg.append("defs");
-    
-    const gradient = defs.append("linearGradient")
-        .attr("id", "legend-gradient")
-        .attr("x1", "0%").attr("y1", "0%")
-        .attr("x2", "100%").attr("y2", "0%");
+        const svg = scaleBox.append("svg")
+            .attr("width", legendWidth + marginLeft) // Adjust width to include left margin
+            .attr("height", legendHeight + 30)
+            .style("display", "block"); // Ensure the SVG is displayed as a block element
 
-    const stops = d3.range(0, 1.05, 0.2);
-    stops.forEach((d, i) => {
-        gradient.append("stop")
-            .attr("offset", `${d * 100}%`)
-            .attr("stop-color", colorScale(d));
-    });
+        const defs = svg.append("defs");
+        
+        const gradient = defs.append("linearGradient")
+            .attr("id", "legend-gradient")
+            .attr("x1", "0%").attr("y1", "0%")
+            .attr("x2", "100%").attr("y2", "0%");
 
-    svg.append("rect")
-        .attr("x", 0)
-        .attr("y", 10)
-        .attr("width", legendWidth)
-        .attr("height", legendHeight)
-        .style("fill", "url(#legend-gradient)");
+        const stops = d3.range(0, 1.05, 0.2);
+        stops.forEach(d => {
+            gradient.append("stop")
+                .attr("offset", `${d * 100}%`)
+                .attr("stop-color", colorScale(d));
+        });
 
-    const axisScale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([0, legendWidth]);
+        svg.append("rect")
+            .attr("x", marginLeft) // Add margin to the left
+            .attr("y", 10)
+            .attr("width", legendWidth - marginLeft) // Adjust width to account for left margin
+            .attr("height", legendHeight)
+            .style("fill", "url(#legend-gradient)");
 
-    const axis = d3.axisBottom(axisScale)
-        .ticks(5)
-        .tickFormat(d3.format(".2f"));
+        const axisScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([marginLeft, legendWidth]); // Adjust range to account for left margin
 
-    svg.append("g")
-        .attr("transform", `translate(0, ${legendHeight + 10})`)
-        .call(axis);
+        const axis = d3.axisBottom(axisScale)
+            .ticks(5)
+            .tickFormat(d3.format(".2f"));
+
+        const axisGroup = svg.append("g")
+            .attr("transform", `translate(0, ${legendHeight + 10})`)
+            .call(axis);
+
+        // Increase the font size of the axis labels and ticks
+        axisGroup.selectAll("text")
+            .style("font-size", "14px"); // Adjust the font size as needed
+    }
+
+    // Initial render
+    renderLegend();
+
+    // Add resize event listener to re-render the legend on window resize
+    window.addEventListener("resize", renderLegend);
 }
-
-
-
-
-
-// Add event listeners to input fields (These are redundant, event listeners are already added inside DOMContentLoaded)
-// document.getElementById('weight-number').addEventListener('input', handleInputChange);
-// document.getElementById('height-number').addEventListener('input', handleInputChange);

@@ -303,7 +303,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 });
-
 function createLegend() {
   const scaleBox = d3.select(".scale-box");
 
@@ -357,7 +356,8 @@ function createLegend() {
 
     // Increase the font size of the axis labels and ticks
     axisGroup.selectAll("text")
-      .style("font-size", "14px"); // Adjust the font size as needed
+      .style("font-size", "14px") // Adjust the font size as needed
+      .style("fill", "var(--color-light)"); // Change the text color to --color-light
   }
 
   // Initial render

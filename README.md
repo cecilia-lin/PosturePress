@@ -30,15 +30,15 @@ adults.
 
 
 # Motivation
---
+---
 Sleep is essential to survival! No one wants to get up to sore joints and neck pain, or worse, wake up with a bed sore after a long night of not-so-restful rest. This is a topic of interest for doctors, patients, and also everyday people, as we all sleep in different positions every night. Most importantly, for bedridden patients who cannot flip independently, we want to provide some insights for them to understand how different sleep positions affect the pressure placed on different body parts and what position is most ideal for them during a long night of sleep. In this interactive visualization, we aim to answer two questions: Based on a person’s past sleeping postures, which area of their body will experience the highest pressure? Given certain body parts that a person doesn’t want to experience pressure (such as an injured shoulder), what kind of sleep posture is most recommended? Thus, this visualization addresses the needs of caregivers, patients, and anyone who sleeps by informing them of which sleeping position is most beneficial to relieve pressure and personalized to fit their specific height and weight.
 
 # Data Transformation
---
+---
 We have 39 sequences of sensor frames in total from 13 experiment participants of different weights and heights in different sleeping postures. The three contour maps we visualize contain aggregated sensor frames corresponding to three different positions (sleeping on the left side, sleeping on your back/supine, and sleeping on the right side) that are specific to the participant closest to the user’s inputted height and weight. To select three records from 39 total records, we filter the data based on weight and height. When a user enters their customized weight and height, we calculate the Euclidean distance between the input and the 13 experiment participants and find the participants with the lowest Euclidean distance relative to the input variable. In addition, we also transform all the sensor data by multiplying 100 by each point to get a unit of mmHg. 
 
 # Design Rationale 
---
+---
 First, we explored static visualizations to have a better understanding of the data. We sought a data visualization that would provide users with more information on which body parts are most affected in different sleeping postures. The first idea we came across was using filtering to help users select different postures for side-by-side comparison, and they could filter the visualization by their own BMI as well to find data more relevant to them. However, we thought BMI was too reductive of a measurement, and thought that this initial idea could have easily been achieved with only a static dashboard. Thus, we pivoted to other interactions to make our dashboard more interactive and informative. 
 
 Since there are a lot of sensor points, we thought it would be a good idea to see where exactly a pressure point is on the patient, and thus, we focused on zooming and hovering for our interactions. Hovering allows users to focus on and identify the pressure put on a specific point of the body that they are concerned with, such as the shoulders. A tooltip that appears when the user hovers over their body part of interest and displays the exact pressure reading in mmHg. 

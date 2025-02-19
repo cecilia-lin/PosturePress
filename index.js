@@ -8,6 +8,9 @@ const height = window.innerHeight / 2;
 const gridWidth = 64;  // Change grid size to fit data later
 const gridHeight = 32;
 
+// Variables to hold color scales
+const colorScale = d3.interpolateMagma;
+
 // Variables to hold data
 var data_left = null;
 var data_right = null;
@@ -153,32 +156,49 @@ svg.call(zoom);
  * Function to handle input changes on the weight and height
  */
 function handleInputChange() {
-  const weight = document.getElementById('weight-number').value;
-  const height = document.getElementById('height-number').value;
+    const weightElement = document.getElementById('weight-number');
+    const heightElement = document.getElementById('height-number');
+    const weightWarning = document.getElementById('weight-hint');
+    const heightWarning = document.getElementById('height-hint');
 
-  d3.selectAll(".tooltip").remove();
+    const weight = parseFloat(weightElement.value);
+    const height = parseFloat(heightElement.value);
 
-  // Finding the closest data point in the JSON data
-  let closestDataPoint = null;
-  let minDistance = Infinity;
-
-  for (const [key, value] of Object.entries(jsonData)) {
-    const float_weight = parseFloat(value.weight);
-    const float_height = parseFloat(value.height);
-    const distance = Math.sqrt((float_weight - weight) ** 2 + (float_height - height) ** 2);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestDataPoint = [key, value];
+    if (isNaN(weight) || weight < 20 || weight > 150) {
+      // change the text and color it red
+      weightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 20 ~ 150</p>";
+      weightElement.style.backgroundColor = 'lightcoral';
+    } else {
+      weightWarning.innerHTML = "<p> Enter Your Weight ↓</p>";
+      weightElement.style.backgroundColor = '';
     }
-  }
 
-  if (closestDataPoint) {
-    updateCharts(jsonData, closestDataPoint[0]);
-  }
-  console.log(data_left);
-  console.log(data_right);
-  console.log(sleep_back);
+    if (isNaN(height) || height < 130 || height > 250) {
+      heightWarning.innerHTML = "<p style='color: lightcoral;'> Must be in 130 ~ 250</p>";
+      heightElement.style.backgroundColor = 'lightcoral';
+    } else {
+      heightWarning.innerHTML = "<p> Enter Your Height ↓</p>";
+      heightElement.style.backgroundColor = '';
+    }
+
+    // Finding the closest data point in the JSON data
+    let closestDataPoint = null;
+    let minDistance = Infinity;
+
+    for (const [key, value] of Object.entries(jsonData)) {
+        const float_weight = parseFloat(value.weight);
+        const float_height = parseFloat(value.height);
+        const distance = Math.sqrt((float_weight - weight) ** 2 + (float_height - height) ** 2);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestDataPoint = [key, value];
+        }
+    }
+
+    if (closestDataPoint) {
+        updateCharts(jsonData, closestDataPoint[0]);
+    }
 }
 
 /**
@@ -191,10 +211,51 @@ function updateCharts(jsonData, subjectKey) {
 
 
   const subject = jsonData[subjectKey];
-  createContourMap("#left", subject.Left, d3.interpolateWarm);
-  createContourMap("#supine", subject.Supine, d3.interpolateWarm);
-  createContourMap("#right", subject.Right, d3.interpolateWarm);
+  createContourMap("#left", subject.Left, colorScale);
+  createContourMap("#supine", subject.Supine, colorScale);
+  createContourMap("#right", subject.Right, colorScale);
 }
+
+// Event listener for DOM content loaded
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("data/experiment1_data.json")
+    .then(response => response.json())
+    .then(data => {
+      jsonData = data; // Assign fetched data to global jsonData
+      updateCharts(jsonData, "S1");
+      createLegend(d3.interpolateRainbow);
+      
+      // Add event listeners to input fields for dynamic updates
+      document.getElementById('weight-number').addEventListener('input', handleInputChange);
+      document.getElementById('height-number').addEventListener('input', handleInputChange);
+
+      // Add event listener to reset button
+      document.querySelector('.reset').addEventListener('click', () => {
+        // Reset the input values to their original numbers
+        document.getElementById('weight-number').value = 120;
+        document.getElementById('height-number').value = 160;
+        // Reset the contour map to the default subject key "S1"
+        updateCharts(jsonData, "S1");
+
+        // Reset the zoom leve of the left SVG
+        const svg = d3.select("#left");
+        const zoom = createContourMap("#left", jsonData["S1"].Left, colorScale);
+        svg.call(zoom.transform, d3.zoomIdentity);
+
+        // Reset the zoom leve of the center SVG
+        const svg2 = d3.select("#supine");
+        const zoom2 = createContourMap("#supine", jsonData["S1"].Supine, colorScale);
+        svg2.call(zoom2.transform, d3.zoomIdentity);
+
+        // Reset the zoom leve of the right SVG
+        const svg3 = d3.select("#right");
+        const zoom3 = createContourMap("#right", jsonData["S1"].Right, colorScale);
+        svg3.call(zoom3.transform, d3.zoomIdentity);
+
+      }
+      );
+    });
+});
 
 /**
  * Resets the input fields, charts to default state (S1), and zoom levels.
@@ -224,9 +285,9 @@ document.addEventListener("DOMContentLoaded", function () {
       jsonData = data; // Assign fetched data to global jsonData
 
       // Initialize charts and get zoom behaviors
-      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, d3.interpolateWarm);
-      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, d3.interpolateWarm);
-      const zoomRight = createContourMap("#right", jsonData["S1"].Right, d3.interpolateWarm);
+      const zoomLeft = createContourMap("#left", jsonData["S1"].Left, colorScale);
+      const zoomSupine = createContourMap("#supine", jsonData["S1"].Supine, colorScale);
+      const zoomRight = createContourMap("#right", jsonData["S1"].Right, colorScale);
 
       // Add event listeners to input fields for dynamic updates
       document.getElementById('weight-number').addEventListener('input', handleInputChange);
@@ -239,207 +300,63 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function createLegend(colorScale) {
+    const scaleBox = d3.select(".scale-box");
 
-// Add event listeners to input fields (These are redundant, event listeners are already added inside DOMContentLoaded)
-// document.getElementById('weight-number').addEventListener('input', handleInputChange);
-// document.getElementById('height-number').addEventListener('input', handleInputChange);
+    function renderLegend() {
+        // Clear any existing SVG elements
+        scaleBox.selectAll("svg").remove();
 
-// TODO
-// place ash's pressure code here later
+        const legendWidth = scaleBox.node().getBoundingClientRect().width - 20; // Adjust width dynamically, accounting for padding
+        const legendHeight = 20;
+        const marginLeft = 20; // Add margin to the left
 
+        const svg = scaleBox.append("svg")
+            .attr("width", legendWidth + marginLeft) // Adjust width to include left margin
+            .attr("height", legendHeight + 30)
+            .style("display", "block"); // Ensure the SVG is displayed as a block element
 
+        const defs = svg.append("defs");
+        
+        const gradient = defs.append("linearGradient")
+            .attr("id", "legend-gradient")
+            .attr("x1", "0%").attr("y1", "0%")
+            .attr("x2", "100%").attr("y2", "0%");
 
-/* 
+        const stops = d3.range(0, 1.05, 0.2);
+        stops.forEach(d => {
+            gradient.append("stop")
+                .attr("offset", `${d * 100}%`)
+                .attr("stop-color", colorScale(d));
+        });
 
-const width = window.innerWidth / 2;
-const height = window.innerHeight / 2;
-const gridWidth = 64;  // change grid size to fit data later 
-const gridHeight = 32;
+        svg.append("rect")
+            .attr("x", marginLeft) // Add margin to the left
+            .attr("y", 10)
+            .attr("width", legendWidth - marginLeft) // Adjust width to account for left margin
+            .attr("height", legendHeight)
+            .style("fill", "url(#legend-gradient)");
 
-// Load the JSON pressure data
-d3.json("data/experiment1_data.json").then((data) => {
-  const pressureData = data.S1.Supine;  // Adjust this path based on your JSON structure
+        const axisScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([marginLeft, legendWidth]); // Adjust range to account for left margin
 
-  const svg = d3.select("#supine")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .style("background", "black");
+        const axis = d3.axisBottom(axisScale)
+            .ticks(5)
+            .tickFormat(d3.format(".2f"));
 
-  const g = svg.append("g");
+        const axisGroup = svg.append("g")
+            .attr("transform", `translate(0, ${legendHeight + 10})`)
+            .call(axis);
 
-  // Placeholder heatmap image
-  const image = g.append("image")
-    .attr("xlink:href", "imgs/heatmap.png")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", width)
-    .attr("height", height);
+        // Increase the font size of the axis labels and ticks
+        axisGroup.selectAll("text")
+            .style("font-size", "14px"); // Adjust the font size as needed
+    }
 
-  // Tooltip
-  const tooltip = d3.select("body")
-    .append("div")
-    .style("position", "absolute")
-    .style("background", "rgba(255, 255, 255, 0.8)")
-    .style("padding", "5px")
-    .style("border-radius", "5px")
-    .style("display", "none")
-    .style("font-size", "14px");
+    // Initial render
+    renderLegend();
 
-  // Function to get pressure value from grid
-  function getPressure(x, y) {
-    const col = Math.floor((x / width) * gridWidth);
-    const row = Math.floor((y / height) * gridHeight);
-    return pressureData[row]?.[col] ? pressureData[row][col].toFixed(2) : "N/A";
-  }
-
-  // Mouse interaction
-  svg.on("mousemove", (event) => {
-    const [x, y] = d3.pointer(event);
-    const pressure = getPressure(x, y);
-
-    tooltip.style("left", `${event.pageX + 10}px`)
-      .style("top", `${event.pageY + 10}px`)
-      .style("display", "block")
-      .html(`Pressure: ${pressure}`);
-  });
-
-  svg.on("mouseleave", () => {
-    tooltip.style("display", "none");
-  });
-
-  // Zoom functionality
-  const zoom = d3.zoom()
-    .scaleExtent([0.5, 5])
-    .on("zoom", (event) => {
-      g.attr("transform", event.transform);
-    });
-
-  svg.call(zoom);
-}); */
-
-
-/* function createContourMap(svgId, data, colorScale) {
-  const svg = d3.select(svgId)
-    .attr("preserveAspectRatio", "xMinYMin meet");
-
-
-  let g = svg.select("g.zoom-container");
-  if (g.empty()) {
-    g = svg.append("g").attr("class", "zoom-container");
-  }
-
-
-    // Create tooltip element
-  const tooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0)
-    .style("position", "absolute")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px")
-    .style("pointer-events", "none"); // To not interfere with mouse events
-
-  function render() {
-    const bbox = svg.node().getBoundingClientRect(); // Get actual size
-    const width = bbox.width;
-    const height = bbox.height;
-    svg.selectAll("*").remove(); // Clear previous render
-
-
-    g.selectAll("*").remove(); 
-
-    // Define a projection that ensures contours fit inside the SVG
-    const scaleX = width / 32;
-    const scaleY = height / 64;
-    const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
-
-    const projection = d3.geoIdentity().scale(scale);
-    const path = d3.geoPath().projection(projection);
-
-    // Normalize data for better visualization
-    const dataMin = d3.min(data.flat());
-    const dataMax = d3.max(data.flat());
-    const normalizedData = data.map(row =>
-      row.map(v => (v - dataMin) / Math.max(dataMax - dataMin, 1e-6))
-    );
-
-    // Generate contour data
-    const contours = d3.contours()
-      .size([32, 64])
-      .thresholds(d3.range(0, 1.05, 0.025)) // Higher resolution
-      (normalizedData.flat());
-
-    // Define a color scale for the contour map
-    const color = d3.scaleSequential(colorScale).domain([0, 1]);
-
-    // Draw the contours and ensure they fit within the SVG
-    svg.append("g")
-      .attr("stroke", "black")
-      .selectAll("path")
-      .data(contours)
-      .join("path")
-      .attr("d", path) // Use correctly scaled projection
-      .attr("fill", d => color(d.value))
-      .attr("stroke-width", 0.2) // Reduce stroke width for clarity
-      .on("mouseover", function(event, d) { // Mouseover event listener
-        tooltip.transition()
-          .duration(200)
-          .style("opacity", .9);
-        tooltip.html("Pressure Value: " + (d.value * (dataMax - dataMin) + dataMin).toFixed(2)) // Show actual pressure value
-          .style("left", (event.pageX) + "px")
-          .style("top", (event.pageY - 28) + "px");
-      })
-      .on("mouseout", function(d) { // Mouseout event listener
-        tooltip.transition()
-          .duration(500)
-          .style("opacity", 0);
-      });
-      
-      // felix's changes
-      // Add pressure readings as text elements
-
-      // svg.selectAll("text")
-      // .data(data.flat())
-      // .enter()
-      // .append("text")
-      // .attr("x", (d, i) => (i % 32) * scaleX + scaleX / 2)
-      // .attr("y", (d, i) => Math.floor(i / 32) * scaleY + scaleY / 2)
-      // .attr("text-anchor", "middle")
-      // .attr("alignment-baseline", "middle")
-      // .attr("font-size", 8)
-      // .attr("fill", "white")
-      // .text(d => d.toFixed(2));
-  }
-
-  // Initial render
-  render();
-
-
-   
-   
-   
-   // Zoom functionality
-  const zoom = d3.zoom()
-   .scaleExtent([0.5, 10]) // Define zoom range
-   .on("zoom", (event) => {
-      g.attr("transform", event.transform);
-    });
-
-  svg.call(zoom);
-
-
-  // Resize observer to update if the SVG dimensions change
-  const resizeObserver = new ResizeObserver(() => {
-    render();
-  });
-  resizeObserver.observe(svg.node());
-} */
-
-
-
-
-
-
+    // Add resize event listener to re-render the legend on window resize
+    window.addEventListener("resize", renderLegend);
+}

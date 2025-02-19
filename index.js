@@ -170,9 +170,9 @@ function handleInputChange() {
  */
 function updateCharts(jsonData, subjectKey) {
   const subject = jsonData[subjectKey];
-  createContourMap("#left", subject.Left, d3.interpolateWarm);
-  createContourMap("#supine", subject.Supine, d3.interpolateWarm);
-  createContourMap("#right", subject.Right, d3.interpolateWarm);
+  createContourMap("#left", subject.Left, d3.interpolatePlasma);
+  createContourMap("#supine", subject.Supine, d3.interpolatePlasma);
+  createContourMap("#right", subject.Right, d3.interpolatePlasma);
 }
 
 // Event listener for DOM content loaded
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       jsonData = data; // Assign fetched data to global jsonData
       updateCharts(jsonData, "S1");
-      createLegend(d3.interpolateWarm);
+      createLegend(d3.interpolatePlasma);
       
       // Add event listeners to input fields for dynamic updates
       document.getElementById('weight-number').addEventListener('input', handleInputChange);

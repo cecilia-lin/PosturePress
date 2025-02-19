@@ -142,7 +142,7 @@ svg {
     border-radius: 8px;
 }
 
-svg:hover {
+svg:not(#legend-svg):hover {
     outline: 5px solid var(--color-indicator);
     border-radius: 5px;
     cursor: pointer;

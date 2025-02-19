@@ -9,11 +9,11 @@ const gridWidth = 64;  // Change grid size to fit data later
 const gridHeight = 32;
 
 // Variables to hold color scales
-// Variables to hold color scales
 const colorScale = d3.scaleQuantize()
   .domain([0, 1])
   .range(d3.schemeRdBu[9].reverse());
-// const colorScale3 = d
+
+
 
 // Variables to hold data
 var data_left = null;
@@ -303,6 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 });
+
 function createLegend() {
   const scaleBox = d3.select(".scale-box");
 
@@ -316,6 +317,7 @@ function createLegend() {
     const marginRight = 30; // Add margin to the right
 
     const svg = scaleBox.append("svg")
+      .attr("id", "legend-svg") // Add special id to the svg
       .attr("width", legendWidth + marginLeft + marginRight) // Adjust width to include left and right margins
       .attr("height", legendHeight + 30)
       .style("display", "block"); // Ensure the SVG is displayed as a block element

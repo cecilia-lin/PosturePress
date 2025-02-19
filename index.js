@@ -1,4 +1,7 @@
-// Constants for dimensions
+// TODO 
+// find another function for the actual .txt values to be overlayed on the heatmap
+// convert the .txt files to svg/d3 friendly format
+
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
 const gridWidth = 64;  // Change grid size to fit data later
@@ -134,7 +137,7 @@ function createContourMap(svgId, data, colorScale) {
       g.attr("transform", `translate(${clampedX},${clampedY}) scale(${transform.k})`);
     });
 
-  svg.call(zoom);
+svg.call(zoom);
 
   // Resize observer to update if the SVG dimensions change
   const resizeObserver = new ResizeObserver(() => {
